@@ -418,6 +418,9 @@
   </script>
 </body>
 </html>
+<script>
+/*  satisfying water-drop  */
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
 function playWater(){
   const now=audioCtx.currentTime;
   // drop layer
@@ -448,3 +451,10 @@ function playWater(){
   noise.connect(filter); filter.connect(noiseG); noiseG.connect(audioCtx.destination);
   noise.start(); noise.stop(now+0.08);
 }
+
+/*  hook to bottle  */
+document.getElementById('water-bottle').addEventListener('click',()=>{
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  playWater();
+});
+</script>
