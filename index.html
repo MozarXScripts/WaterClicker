@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Water Bottle Clicker</title>
   <style>
-    /*  (same styles as last send — nothing touched)  */
+    /*  =====  same glassy base  =====  */
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white;overflow:hidden}
     .game-container{background:rgba(255,255,255,.05);backdrop-filter:blur(15px);border-radius:25px;padding:40px;box-shadow:0 25px 45px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);max-width:900px;width:95%}
     h1{text-align:center;margin-bottom:30px;font-size:3em;text-shadow:3px 3px 6px rgba(0,0,0,.5);background:linear-gradient(45deg,#87ceeb,#4682b4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:40px}
@@ -52,6 +52,21 @@
     .prestige-btn{margin-top:15px;padding:10px 20px;background:rgba(255,215,0,.2);border:2px solid #ffd700;color:#ffd700;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
     .prestige-btn:hover{background:rgba(255,215,0,.3);box-shadow:0 0 15px rgba(255,215,0,.5)}
     .prestige-wrap{display:none;text-align:center;margin-top:15px}
+
+    /*  =====  SECRET CODE BUTTON  =====  */
+    .secret-btn{position:fixed;bottom:15px;right:15px;padding:6px 12px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:6px;font-size:.8em;cursor:pointer;transition:all .2s;z-index:999}
+    .secret-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+    /*  =====  DEV MENU  =====  */
+    .dev-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:300px;color:#eee;display:none;flex-direction:column;gap:10px;z-index:1000}
+    .dev-menu.show{display:flex}
+    .dev-header{display:flex;justify-content:space-between;align-items:center}
+    .dev-title{font-size:1.1em;font-weight:bold;color:#87ceeb}
+    .dev-close{background:none;border:none;color:#eee;font-size:1.2em;cursor:pointer}
+    .dev-close:hover{color:#ff5c5c}
+    .dev-input{width:100%;padding:6px 8px;border-radius:4px;border:none;background:rgba(255,255,255,.1);color:#fff}
+    .dev-btn{padding:6px;border-radius:4px;border:none;background:#4682b4;color:#fff;cursor:pointer;transition:background .2s}
+    .dev-btn:hover{background:#5691c4}
   </style>
 </head>
 
@@ -61,6 +76,36 @@
   <div class="floating-water" style="top:20%;right:15%;animation-delay:3s;">💧</div>
   <div class="floating-water" style="bottom:30%;left:20%;animation-delay:6s;">💧</div>
   <div class="floating-water" style="bottom:10%;right:10%;animation-delay:9s;">💧</div>
+
+  <!--  SECRET CODE BUTTON  -->
+  <button class="secret-btn" onclick="askSecretCode()">Secret Code</button>
+
+  <!--  DEV MENU  -->
+  <div class="dev-menu" id="devMenu">
+    <div class="dev-header">
+      <span class="dev-title">🛠️ Dev Menu</span>
+      <button class="dev-close" onclick="toggleDev(false)">×</button>
+    </div>
+
+    <label>Set Water</label>
+    <input type="number" class="dev-input" id="devWater" min="0" value="0">
+    <button class="dev-btn" onclick="setWater()">Apply</button>
+
+    <label>Set Multiplier</label>
+    <input type="number" class="dev-input" id="devMult" min="0.1" step="0.1" value="1">
+    <button class="dev-btn" onclick="setMult()">Apply</button>
+
+    <label>Set Auto/sec</label>
+    <input type="number" class="dev-input" id="devAuto" min="0" value="0">
+    <button class="dev-btn" onclick="setAuto()">Apply</button>
+
+    <label>Set Clicks</label>
+    <input type="number" class="dev-input" id="devClicks" min="0" value="0">
+    <button class="dev-btn" onclick="setClicks()">Apply</button>
+
+    <button class="dev-btn" onclick="instantPrestige()">Instant Prestige (+0.1×)</button>
+    <button class="dev-btn" onclick="devReset()">Dev Hard Reset</button>
+  </div>
 
   <div class="game-container">
     <h1>💧 Water Bottle Clicker 💧</h1>
@@ -99,7 +144,7 @@
   </div>
 
   <script>
-    //  ==========  SAVE / LOAD  ==========
+    //  =====  SAVE / LOAD  =====
     function loadGame(){
       const s=localStorage.getItem('waterClickerSave');
       if(s){
@@ -112,17 +157,17 @@
       localStorage.setItem('waterClickerSave',JSON.stringify(gameState));
     }
 
-    //  ==========  GAME STATE  ==========
+    //  =====  GAME STATE  =====
     let gameState={
       water:0,
       totalClicks:0,
       waterPerClick:1,
       autoRate:0,
-      multiplier:1,          //  prestige multiplier
-      totalWaterAllTime:0,   //  tracks every drop ever
+      multiplier:1,
+      totalWaterAllTime:0,
       upgrades:{
         betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:50,effect:()=>{gameState.waterPerClick+=1}},
-        autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},   //  <- now 2nd
+        autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},
         biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:5,effect:()=>{gameState.waterPerClick*=2}},
         megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:10,effect:()=>{gameState.autoRate+=10}},
         superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:3,effect:()=>{gameState.waterPerClick*=3}},
@@ -131,7 +176,7 @@
       }
     };
 
-    //  ==========  UTILS  ==========
+    //  =====  UTILS  =====
     function formatNumber(n){
       if(n>=1e9)return(n/1e9).toFixed(2)+'B';
       if(n>=1e6)return(n/1e6).toFixed(2)+'M';
@@ -139,7 +184,7 @@
       return Math.floor(n).toString();
     }
 
-    //  ==========  DISPLAY  ==========
+    //  =====  DISPLAY  =====
     function updateDisplay(){
       const m=gameState.multiplier;
       document.getElementById('water-count').textContent=formatNumber(gameState.water);
@@ -163,7 +208,7 @@
       lvl.style.height=`${p}%`;
     }
 
-    //  ==========  CLICK  ==========
+    //  =====  CLICK  =====
     document.getElementById('water-bottle').addEventListener('click',function(e){
       const gained=gameState.waterPerClick*gameState.multiplier;
       gameState.water+=gained;
@@ -185,7 +230,7 @@
       setTimeout(()=>d.remove(),1500);
     }
 
-    //  ==========  UPGRADES  ==========
+    //  =====  UPGRADES  =====
     function renderUpgrades(){
       const c=document.getElementById('upgrades-container');
       c.innerHTML='';
@@ -223,7 +268,7 @@
       }
     }
 
-    //  ==========  PRESTIGE  ==========
+    //  =====  PRESTIGE  =====
     function prestige(){
       if(gameState.totalWaterAllTime<10000)return alert('Need at least 10 000 total water to prestige!');
       const newMult=1+Math.floor(gameState.totalWaterAllTime/10000)*0.1;
@@ -251,14 +296,14 @@
       renderUpgrades();
     }
 
-    //  ==========  RESET (wipes everything)  ==========
+    //  =====  RESET  =====
     function resetGame(){
       if(!confirm('Erase ALL progress (including multiplier) and start over?'))return;
       localStorage.removeItem('waterClickerSave');
       location.reload();
     }
 
-    //  ==========  AUTO  ==========
+    //  =====  AUTO  =====
     setInterval(()=>{
       if(gameState.autoRate>0){
         const gained=gameState.autoRate*gameState.multiplier/10;
@@ -270,10 +315,67 @@
 
     setInterval(saveGame,15000);
 
-    //  ==========  INIT  ==========
+    //  =====  SECRET CODE SYSTEM  =====
+    const SECRET_CODE='calvinissigma';
+    let codeInput='';
+    let devUnlocked=localStorage.getItem('devUnlocked')==='true';
+
+    function askSecretCode(){
+      const ans=prompt('Enter secret code:');
+      if(ans===SECRET_CODE){
+        devUnlocked=true;
+        localStorage.setItem('devUnlocked','true');
+        toggleDev(true);
+      }else{
+        alert('Nope.');
+      }
+    }
+
+    function toggleDev(show){
+      const d=document.getElementById('devMenu');
+      if(show)d.classList.add('show');else d.classList.remove('show');
+    }
+
+    //  =====  DEV MENU FUNCTIONS  =====
+    function setWater(){
+      const v=Number(document.getElementById('devWater').value);
+      if(v<0)return;
+      gameState.water=v;
+      updateDisplay();renderUpgrades();saveGame();
+    }
+    function setMult(){
+      const v=Number(document.getElementById('devMult').value);
+      if(v<0.1)return;
+      gameState.multiplier=v;
+      updateDisplay();saveGame();
+    }
+    function setAuto(){
+      const v=Number(document.getElementById('devAuto').value);
+      if(v<0)return;
+      gameState.autoRate=v;
+      updateDisplay();saveGame();
+    }
+    function setClicks(){
+      const v=Number(document.getElementById('devClicks').value);
+      if(v<0)return;
+      gameState.totalClicks=v;
+      updateDisplay();saveGame();
+    }
+    function instantPrestige(){
+      gameState.totalWaterAllTime+=10000;
+      prestige();
+    }
+    function devReset(){
+      if(!confirm('Dev hard-reset everything?'))return;
+      localStorage.removeItem('waterClickerSave');
+      location.reload();
+    }
+
+    //  =====  INIT  =====
     loadGame();
     updateDisplay();
     renderUpgrades();
+    if(devUnlocked)toggleDev(true);   // keep open if already unlocked
   </script>
 </body>
 </html>
