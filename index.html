@@ -418,27 +418,33 @@
   </script>
 </body>
 </html>
-<!--  put this anywhere in <body>  -->
-<script>
-/*  =====  SATISFYING WATER DROP  =====  */
-const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-function playDrop(){
-  const osc=audioCtx.createOscillator();
-  const gain=audioCtx.createGain();
-  osc.type='sine';
-  osc.frequency.setValueAtTime(800,audioCtx.currentTime);     // start pitch
-  osc.frequency.exponentialRampToValueAtTime(400,audioCtx.currentTime+0.08); // drop
-  gain.gain.setValueAtTime(0.2,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime+0.13);   // 130 ms
+function playWater(){
+  const now=audioCtx.currentTime;
+  // drop layer
+  const drop=audioCtx.createOscillator();
+  const dropG=audioCtx.createGain();
+  drop.type='sine';
+  drop.frequency.setValueAtTime(900,now);
+  drop.frequency.exponentialRampToValueAtTime(350,now+0.1);
+  dropG.gain.setValueAtTime(0.25,now);
+  dropG.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
+  drop.connect(dropG);
+  dropG.connect(audioCtx.destination);
+  drop.start(); drop.stop(now+0.13);
+
+  // splash layer (filtered noise)
+  const noise=audioCtx.createBufferSource();
+  const noiseG=audioCtx.createGain();
+  const filter=audioCtx.createBiquadFilter();
+  const buffer=audioCtx.createBuffer(1, audioCtx.sampleRate*0.08, audioCtx.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
+  noise.buffer=buffer;
+  filter.type='bandpass';
+  filter.frequency.value=1200;
+  filter.Q.value=0.8;
+  noiseG.gain.setValueAtTime(0.08,now);
+  noiseG.gain.exponentialRampToValueAtTime(0.0001,now+0.08);
+  noise.connect(filter); filter.connect(noiseG); noiseG.connect(audioCtx.destination);
+  noise.start(); noise.stop(now+0.08);
 }
-/*  hook into existing click  */
-document.getElementById('water-bottle').addEventListener('click',()=>{
-  /*  unlock audio on first user gesture (mobile)  */
-  if(audioCtx.state==='suspended')audioCtx.resume();
-  playDrop();
-});
-</script>
