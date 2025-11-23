@@ -418,3 +418,27 @@
   </script>
 </body>
 </html>
+<!--  put this anywhere in <body>  -->
+<script>
+/*  =====  SATISFYING WATER DROP  =====  */
+const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+function playDrop(){
+  const osc=audioCtx.createOscillator();
+  const gain=audioCtx.createGain();
+  osc.type='sine';
+  osc.frequency.setValueAtTime(800,audioCtx.currentTime);     // start pitch
+  osc.frequency.exponentialRampToValueAtTime(400,audioCtx.currentTime+0.08); // drop
+  gain.gain.setValueAtTime(0.2,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+0.12);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime+0.13);   // 130 ms
+}
+/*  hook into existing click  */
+document.getElementById('water-bottle').addEventListener('click',()=>{
+  /*  unlock audio on first user gesture (mobile)  */
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  playDrop();
+});
+</script>
