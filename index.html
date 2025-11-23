@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Water Bottle Clicker</title>
+  <title id="pageTitle">💧 Water Bottle Clicker</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white}
@@ -19,11 +19,13 @@
     .water-bottle{width:250px;height:350px;margin:0 auto;position:relative;cursor:pointer;transition:all .2s ease;filter:drop-shadow(0 10px 20px rgba(0,0,0,.3))}
     .water-bottle:hover{transform:scale(1.05) rotate(2deg)}
     .water-bottle:active{transform:scale(.98) rotate(-1deg);filter:drop-shadow(0 5px 10px rgba(0,0,0,.2))}
-    .bottle-body{width:100%;height:300px;background:linear-gradient(to bottom,transparent 0%,rgba(135,206,235,.2) 100%);border:4px solid #2c3e50;border-radius:25px 25px 50px 50px;position:relative;overflow:hidden;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
+    .bottle-body{width:100%;height:300px;border:4px solid #2c3e50;border-radius:25px 25px 50px 50px;position:relative;overflow:hidden;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
     .bottle-cap{width:100px;height:40px;background:linear-gradient(to bottom,#34495e,#2c3e50);border-radius:15px 15px 0 0;margin:0 auto;position:relative;top:-8px;box-shadow:0 -5px 10px rgba(0,0,0,.3)}
     .water-level{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,#0066cc,#0099ff,#33ccff);transition:height .5s ease;border-radius:0 0 46px 46px;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
     .water-surface{position:absolute;top:-5px;left:0;right:0;height:10px;background:rgba(255,255,255,.4);border-radius:50%;animation:wave 3s infinite ease-in-out}
     @keyframes wave{0%,100%{transform:scaleX(1) scaleY(1)}50%{transform:scaleX(1.1) scaleY(.8)}}
+    .fizz{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="2" cy="2" r="0.8" fill="rgba(255,255,255,.6)"/><circle cx="5" cy="6" r="0.6" fill="rgba(255,255,255,.5)"/><circle cx="8" cy="3" r="0.7" fill="rgba(255,255,255,.4)"/></svg>') 0 0/15px 15px;animation:fizz 1.2s infinite linear}
+    @keyframes fizz{0%{background-position:0 0}100%{background-position:20px 20px}}
     .click-effect{position:absolute;pointer-events:none;color:#00ff88;font-weight:bold;font-size:24px;text-shadow:2px 2px 4px rgba(0,0,0,.5);animation:floatUp 1.5s ease-out forwards}
     @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
     .upgrades-section{background:rgba(255,255,255,.05);border-radius:20px;padding:25px;border:1px solid rgba(255,255,255,.1)}
@@ -70,7 +72,7 @@
     .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
     .dev-min-bar:hover{background:rgba(255,255,255,.1)}
 
-    /*  =====  SHOP / CARD PACKS  =====  */
+    /*  =====  SHOP / CLICKER BOTTLES  =====  */
     .shop-btn{margin-top:10px;padding:10px 20px;background:rgba(0,180,255,.2);border:2px solid #00b4ff;color:#00b4ff;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
     .shop-btn:hover{background:rgba(0,180,255,.3);box-shadow:0 0 15px rgba(0,180,255,.5)}
     .shop-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3000}
@@ -124,6 +126,13 @@
     .collection-sell-btn{margin-top:4px;padding:4px 6px;border:none;border-radius:4px;background:#e74c3c;color:#fff;cursor:pointer;font-size:.7em;font-weight:bold}
     .collection-close{align-self:flex-end;padding:4px 10px;background:#c44d4d;color:#fff;border:none;border-radius:6px;cursor:pointer}
     .collection-close:hover{background:#d35e5e}
+
+    /*  =====  CLICKER SELECT  =====  */
+    .clicker-select{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .clicker-btn{padding:6px 10px;border:1px solid rgba(255,255,255,.3);border-radius:6px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:.8em;font-weight:bold;transition:all .2s}
+    .clicker-btn:hover{background:rgba(255,255,255,.2)}
+    .clicker-btn.active{border-color:#ffd700;box-shadow:0 0 8px #ffd700}
+    .calvin-face{width:100%;height:100%;object-fit:cover;border-radius:25px 25px 50px 50px}
   </style>
 </head>
 
@@ -209,8 +218,10 @@
   <!--  SHOP MODAL  -->
   <div class="shop-modal" id="shopModal" style="display:none">
     <div class="shop-box">
-      <div class="shop-title">🎴 Card Shop</div>
+      <div class="shop-title">🛍️ Shop</div>
       <button class="shop-close" onclick="closeShop()">Close</button>
+
+      <!--  Card Packs  -->
       <div class="pack-item" onclick="buyPack('common')">
         <div>
           <div class="pack-name">Common Pack</div>
@@ -228,10 +239,71 @@
       <div class="pack-item" onclick="buyPack('legendary')">
         <div>
           <div class="pack-name">Legendary Pack</div>
-          <div class="pack-odds">50% Epic | 35% Legendary | 0.00001% ULTAMATE</div>
+          <div class="pack-odds">50% Epic | 35% Legendary | 0.0000001% ULTAMATE</div>
         </div>
         <div class="pack-cost">10 000 💧</div>
       </div>
+
+      <!--  Clicker Bottles  -->
+      <div class="pack-item" onclick="buyClicker('water')">
+        <div>
+          <div class="pack-name">Classic Water</div>
+          <div class="pack-odds">The original 💧</div>
+        </div>
+        <div class="pack-cost">Free</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('dietcoke')">
+        <div>
+          <div class="pack-name">Diet Coke</div>
+          <div class="pack-odds">Black fizz power</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('sprite')">
+        <div>
+          <div class="pack-name">Sprite</div>
+          <div class="pack-odds">Crystal-clear fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('oj')">
+        <div>
+          <div class="pack-name">Orange Juice</div>
+          <div class="pack-odds">Orange + fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('drpepper')">
+        <div>
+          <div class="pack-name">Dr Pepper</div>
+          <div class="pack-odds">Mystery fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+
+      <!--  Custom Character Clickers  -->
+      <div class="pack-item" onclick="buyClicker('calvin')">
+        <div>
+          <div class="pack-name">Calvin Clicker</div>
+          <div class="pack-odds">Golden face bottle</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('dawson')">
+        <div>
+          <div class="pack-name">Dawson Clicker</div>
+          <div class="pack-odds">Golden liquid</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('cj')">
+        <div>
+          <div class="pack-name">CJ Clicker</div>
+          <div class="pack-odds">Golden shine</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+
       <button class="view-collection-btn" onclick="openCollection()">📂 View Collection</button>
     </div>
   </div>
@@ -255,7 +327,7 @@
   </div>
 
   <div class="game-container">
-    <h1>💧 Water Bottle Clicker 💧</h1>
+    <h1 id="mainTitle">💧 Water Bottle Clicker</h1>
     <div class="stats">
       <div class="stat-box"><div class="stat-label">Water Collected</div><div class="stat-value" id="water-count">0</div></div>
       <div class="stat-box"><div class="stat-label">Water per Click</div><div class="stat-value" id="water-per-click">1</div></div>
@@ -268,7 +340,8 @@
       <div class="bottle-section">
         <div class="water-bottle" id="water-bottle">
           <div class="bottle-cap"></div>
-          <div class="bottle-body">
+          <div class="bottle-body" id="bottleBody">
+            <div class="fizz" id="fizzLayer"></div>
             <div class="water-level" id="water-level"><div class="water-surface"></div></div>
           </div>
         </div>
@@ -277,7 +350,7 @@
           <button class="prestige-btn" onclick="prestige()">Prestige (reset for +0.1× multiplier)</button>
         </div>
         <button class="prestige-btn" style="margin-top:10px" onclick="openGamble()">💰 Water Gamble</button>
-        <button class="shop-btn" onclick="openShop()">🎴 Card Shop</button>
+        <button class="shop-btn" onclick="openShop()">🛍️ Shop</button>
       </div>
 
       <div class="upgrades-section">
@@ -301,6 +374,8 @@
         gameState={...gameState,...l};
         gameState.upgrades={...gameState.upgrades,...l.upgrades};
         if(l.collection) gameState.collection=l.collection;
+        if(l.ownedClickers) gameState.ownedClickers=l.ownedClickers;
+        if(l.activeClicker) gameState.activeClicker=l.activeClicker;
       }
     }
     function saveGame(){
@@ -316,15 +391,29 @@
       multiplier:1,
       totalWaterAllTime:0,
       collection:[],
+      ownedClickers:['water'],
+      activeClicker:'water',
       upgrades:{
-        betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:50,effect:()=>{gameState.waterPerClick+=1}},
-        autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},
-        biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:5,effect:()=>{gameState.waterPerClick*=2}},
-        megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:10,effect:()=>{gameState.autoRate+=10}},
-        superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:3,effect:()=>{gameState.waterPerClick*=3}},
-        waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:5,effect:()=>{gameState.autoRate+=100}},
-        oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:3,effect:()=>{gameState.autoRate+=1000}}
+        betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick+=1}},
+        autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1}},
+        biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=2}},
+        megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=10}},
+        superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=3}},
+        waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=100}},
+        oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1000}}
       }
+    };
+
+    //  =====  CLICKER CONFIGS  =====
+    const clickerData={
+      water:{name:'Water Bottle',liquid:'linear-gradient(to top,#0066cc,#0099ff,#33ccff)',fizz:true,cost:0},
+      dietcoke:{name:'Diet Coke',liquid:'linear-gradient(to top,#111,#222,#111)',fizz:true,cost:5000},
+      sprite:{name:'Sprite',liquid:'linear-gradient(to top,#f6f6f6,#fff,#f6f6f6)',fizz:true,cost:5000},
+      oj:{name:'Orange Juice',liquid:'linear-gradient(to top,#ff8c00,#ffa500,#ff8c00)',fizz:true,cost:5000},
+      drpepper:{name:'Dr Pepper',liquid:'linear-gradient(to top,#2a1a1a,#3a2a2a,#2a1a1a)',fizz:true,cost:5000},
+      calvin:{name:'Calvin',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000,face:true},
+      dawson:{name:'Dawson',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000},
+      cj:{name:'CJ',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000}
     };
 
     //  =====  CARD DATA  =====
@@ -350,7 +439,11 @@
         {name:"Leviathan",emoji:"🐉",value:2000}
       ],
       ULTAMATE:[
-        {name:"The One And Only Jellybean",emoji:"👑",value:1000000000000}
+        {name:"The One And Only Jellybean",emoji:"👑",value:Infinity},
+        {name:"Infinity Droplet",emoji:"♾️",value:1e9},
+        {name:"Eternal Wave",emoji:"🌊",value:5e8},
+        {name:"Galaxy Ocean",emoji:"🌌",value=2e8},
+        {name:"Chaos Vial",emoji:"🧪",value=1e8}
       ]
     };
 
@@ -384,6 +477,25 @@
       const lvl=document.getElementById('water-level');
       const p=Math.min((gameState.water%2000)/2000*100,100);
       lvl.style.height=`${p}%`;
+    }
+
+    //  =====  CLICKER VISUALS  =====
+    function applyClicker(){
+      const cfg=clickerData[gameState.activeClicker];
+      document.getElementById('pageTitle').textContent=`${cfg.emoji} ${cfg.name} Clicker`;
+      document.getElementById('mainTitle').textContent=`${cfg.emoji} ${cfg.name} Clicker`;
+      const body=document.getElementById('bottleBody');
+      body.style.background=cfg.liquid;
+      const fizz=document.getElementById('fizzLayer');
+      fizz.style.display=cfg.fizz?'block':'none';
+      if(cfg.face){
+        body.innerHTML='<img class="calvin-face" src="PUT_CALVIN_FACE_URL_HERE" alt="Calvin"><div class="fizz" id="fizzLayer"></div><div class="water-level" id="waterLevel"><div class="water-surface"></div></div>';
+        document.getElementById('fizzLayer').style.display='block';
+      }else{
+        body.innerHTML='<div class="fizz" id="fizzLayer"></div><div class="water-level" id="waterLevel"><div class="water-surface"></div></div>';
+        document.getElementById('fizzLayer').style.display=cfg.fizz?'block':'none';
+      }
+      document.getElementById('waterLevel').style.bottom='0';
     }
 
     //  =====  CLICK  =====
@@ -460,24 +572,27 @@
         multiplier:newMult,
         totalWaterAllTime:0,
         collection:[],
+        ownedClickers:['water'],
+        activeClicker:'water',
         upgrades:{
-          betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:50,effect:()=>{gameState.waterPerClick+=1}},
-          autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},
-          biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:5,effect:()=>{gameState.waterPerClick*=2}},
-          megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:10,effect:()=>{gameState.autoRate+=10}},
-          superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:3,effect:()=>{gameState.waterPerClick*=3}},
-          waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:5,effect:()=>{gameState.autoRate+=100}},
-          oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:3,effect:()=>{gameState.autoRate+=1000}}
+          betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick+=1}},
+          autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1}},
+          biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=2}},
+          megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=10}},
+          superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=3}},
+          waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=100}},
+          oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1000}}
         }
       };
       saveGame();
       updateDisplay();
       renderUpgrades();
+      applyClicker();
     }
 
     //  =====  RESET  =====
     function resetGame(){
-      if(!confirm('Erase ALL progress (including multiplier & cards) and start over?'))return;
+      if(!confirm('Erase ALL progress (including multiplier & cards & clickers) and start over?'))return;
       localStorage.removeItem('waterClickerSave');
       location.reload();
     }
@@ -550,12 +665,17 @@
       const rarities=['common','rare','epic','legendary','ULTAMATE'];
       const r=prompt('Enter rarity (common/rare/epic/legendary/ULTAMATE):')?.toLowerCase();
       if(!rarities.includes(r))return alert('Invalid rarity');
-      if(r==='godly'){
+      if(r==='ULTAMATE'){
         const code=prompt('Enter ULTAMATE code:');
         if(code!=='0717')return alert('Wrong code');
       }
-      giveCard(r);
-      alert('Card given!');
+      const pool=cardData[r];
+      const names=pool.map(c=>c.name).join(', ');
+      const pick=prompt(`Available ${r} cards:\n${names}\n\nType exact card name to add:`);
+      const card=pool.find(c=>c.name.toLowerCase()===pick.toLowerCase());
+      if(!card)return alert('Card not found');
+      gameState.collection.push({...card,rarity:r});
+      alert(`${card.name} added to collection!`);
       saveGame();
     }
 
@@ -641,7 +761,7 @@
       document.getElementById('shopModal').style.display='none';
     }
     function buyPack(type){
-      const prices={common:250,rare:1000,legendary:5000};
+      const prices={common:250,rare:1000,legendary:10000};
       const price=prices[type];
       if(gameState.water<price)return alert('Not enough water!');
       gameState.water-=price;
@@ -660,7 +780,7 @@
         }else if(type==='rare'){
           r=rng()<0.6?'rare':rng()<0.9?'epic':'legendary';
         }else{
-          r=rng()<0.5?'epic':rng()<0.85?'legendary':'godly';
+          r=rng()<0.5?'epic':rng()<0.85?'legendary':(rng()<0.000000001?'ULTAMATE':'legendary');
         }
         const pool=cardData[r];
         const card=pool[Math.floor(Math.random()*pool.length)];
@@ -764,16 +884,969 @@
       renderCollection();
       saveGame();
     }
-    function giveCard(rarity){
-      const pool=cardData[rarity];
-      const card=pool[Math.floor(Math.random()*pool.length)];
-      gameState.collection.push({...card,rarity});
+
+    //  =====  CLICKER SHOP  =====
+    function buyClicker(key){
+      if(gameState.ownedClickers.includes(key))return alert('Already owned!');
+      const cost=clickerData[key].cost;
+      if(gameState.water<cost)return alert('Not enough water!');
+      gameState.water-=cost;
+      gameState.ownedClickers.push(key);
+      gameState.activeClicker=key;
+      applyClicker();
+      updateDisplay();
+      saveGame();
     }
 
     //  =====  INIT  =====
     loadGame();
     updateDisplay();
     renderUpgrades();
+    applyClicker();
+  </script>
+
+  <!--  satisfying water-drop sound  -->
+  <script>
+    const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    function playWater(){
+      const now=audioCtx.currentTime;
+      const drop=audioCtx.createOscillator();
+      const dropG=audioCtx.createGain();
+      drop.type='sine';
+      drop.frequency.setValueAtTime(900,now);
+      drop.frequency.exponentialRampToValueAtTime(350,now+0.1);
+      dropG.gain.setValueAtTime(0.25,now);
+      dropG.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
+      drop.connect(dropG);
+      dropG.connect(audioCtx.destination);
+      drop.start(); drop.stop(now+0.13);
+
+      const noise=audioCtx.createBufferSource();
+      const noiseG=audioCtx.createGain();
+      const filter=audioCtx.createBiquadFilter();
+      const buffer=audioCtx.createBuffer(1, audioCtx.sampleRate*0.08, audioCtx.sampleRate);
+      const data=buffer.getChannelData(0);
+      for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
+      noise.buffer=buffer;
+      filter.type='bandpass';
+      filter.frequency.value=1200;
+      filter.Q.value=0.8;
+      noiseG.gain.setValueAtTime(0.08,now);
+      noiseG.gain.exponentialRampToValueAtTime(0.0001,now+0.08);
+      noise.connect(filter); filter.connect(noiseG); noiseG.connect(audioCtx.destination);
+      noise.start(); noise.stop(now+0.08);
+    }
+    document.getElementById('water-bottle').addEventListener('click',()=>{
+      if(audioCtx.state==='suspended')audioCtx.resume();
+      playWater();
+    });
+  </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">💧 Water Bottle Clicker</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white}
+    .game-container{background:rgba(255,255,255,.05);backdrop-filter:blur(15px);border-radius:25px;padding:40px;box-shadow:0 25px 45px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);max-width:900px;width:95%}
+    h1{text-align:center;margin-bottom:30px;font-size:3em;text-shadow:3px 3px 6px rgba(0,0,0,.5);background:linear-gradient(45deg,#87ceeb,#4682b4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:40px}
+    .stat-box{background:rgba(255,255,255,.1);padding:20px;border-radius:15px;text-align:center;border:1px solid rgba(255,255,255,.2);transition:transform .3s ease}
+    .stat-box:hover{transform:translateY(-5px);background:rgba(255,255,255,.15)}
+    .stat-label{font-size:.9em;opacity:.8;margin-bottom:5px}
+    .stat-value{font-size:1.8em;font-weight:bold;color:#87ceeb}
+    .game-area{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+    .bottle-section{text-align:center}
+    .water-bottle{width:250px;height:350px;margin:0 auto;position:relative;cursor:pointer;transition:all .2s ease;filter:drop-shadow(0 10px 20px rgba(0,0,0,.3))}
+    .water-bottle:hover{transform:scale(1.05) rotate(2deg)}
+    .water-bottle:active{transform:scale(.98) rotate(-1deg);filter:drop-shadow(0 5px 10px rgba(0,0,0,.2))}
+    .bottle-body{width:100%;height:300px;border:4px solid #2c3e50;border-radius:25px 25px 50px 50px;position:relative;overflow:hidden;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
+    .bottle-cap{width:100px;height:40px;background:linear-gradient(to bottom,#34495e,#2c3e50);border-radius:15px 15px 0 0;margin:0 auto;position:relative;top:-8px;box-shadow:0 -5px 10px rgba(0,0,0,.3)}
+    .water-level{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,#0066cc,#0099ff,#33ccff);transition:height .5s ease;border-radius:0 0 46px 46px;box-shadow:inset 0 0 20px rgba(0,0,0,.2)}
+    .water-surface{position:absolute;top:-5px;left:0;right:0;height:10px;background:rgba(255,255,255,.4);border-radius:50%;animation:wave 3s infinite ease-in-out}
+    @keyframes wave{0%,100%{transform:scaleX(1) scaleY(1)}50%{transform:scaleX(1.1) scaleY(.8)}}
+    .fizz{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="2" cy="2" r="0.8" fill="rgba(255,255,255,.6)"/><circle cx="5" cy="6" r="0.6" fill="rgba(255,255,255,.5)"/><circle cx="8" cy="3" r="0.7" fill="rgba(255,255,255,.4)"/></svg>') 0 0/15px 15px;animation:fizz 1.2s infinite linear}
+    @keyframes fizz{0%{background-position:0 0}100%{background-position:20px 20px}}
+    .click-effect{position:absolute;pointer-events:none;color:#00ff88;font-weight:bold;font-size:24px;text-shadow:2px 2px 4px rgba(0,0,0,.5);animation:floatUp 1.5s ease-out forwards}
+    @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
+    .upgrades-section{background:rgba(255,255,255,.05);border-radius:20px;padding:25px;border:1px solid rgba(255,255,255,.1)}
+    .upgrades-title{text-align:center;margin-bottom:25px;font-size:1.8em;color:#87ceeb;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+    .upgrade-item{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));border:2px solid rgba(255,255,255,.2);border-radius:15px;padding:18px 22px;margin-bottom:12px;cursor:pointer;transition:all .3s ease;gap:12px}
+    .upgrade-item:hover:not(.disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.3);border-color:rgba(135,206,235,.5)}
+    .upgrade-item:active:not(.disabled){transform:translateY(0);box-shadow:0 4px 10px rgba(0,0,0,.2)}
+    .upgrade-item.disabled{opacity:.4;cursor:not-allowed}
+    .upgrade-item.purchased{background:linear-gradient(135deg,rgba(0,255,136,.1),rgba(0,255,136,.05));border-color:rgba(0,255,136,.3)}
+    .upgrade-left{flex:1 1 auto}
+    .upgrade-name{font-weight:600;font-size:1.05em;color:#87ceeb;margin-bottom:4px}
+    .upgrade-description{font-size:.85em;opacity:.8}
+    .upgrade-right{text-align:right;flex-shrink:0}
+    .upgrade-cost{color:#ffd700;font-weight:bold;font-size:1em;background:rgba(255,215,0,.1);padding:4px 12px;border-radius:20px;white-space:nowrap}
+    .upgrade-owned{background:rgba(0,255,136,.2);color:#00ff88;padding:3px 8px;border-radius:12px;font-size:.75em;font-weight:bold;margin-top:4px;display:inline-block}
+    .upgrade-progress{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:8px;overflow:hidden}
+    .upgrade-progress-bar{height:100%;background:linear-gradient(to right,#0099ff,#33ccff);border-radius:2px;transition:width .3s ease}
+    .floating-water{position:fixed;pointer-events:none;opacity:.1;font-size:40px;filter:blur(1px);animation:float 15s infinite ease-in-out}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-30px) rotate(180deg) scale(1.2)}}
+    @media(max-width:768px){.game-area{grid-template-columns:1fr;gap:30px}.water-bottle{width:200px;height:280px}.bottle-body{height:240px}h1{font-size:2.2em}}
+    .footer{text-align:center;margin-top:30px;font-size:.9em;opacity:.7}
+    .reset-btn{margin-top:10px;padding:8px 18px;background:rgba(255,80,80,.25);border:1px solid rgba(255,80,80,.6);color:#ffb8b8;border-radius:8px;cursor:pointer;transition:background .2s}
+    .reset-btn:hover{background:rgba(255,80,80,.4)}
+    .prestige-btn{margin-top:15px;padding:10px 20px;background:rgba(255,215,0,.2);border:2px solid #ffd700;color:#ffd700;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
+    .prestige-btn:hover{background:rgba(255,215,0,.3);box-shadow:0 0 15px rgba(255,215,0,.5)}
+    .prestige-wrap{display:none;text-align:center;margin-top:15px}
+
+    /*  =====  SECRET CODE BUTTON  =====  */
+    .secret-btn{position:fixed;bottom:15px;right:15px;padding:6px 12px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:6px;font-size:.8em;cursor:pointer;transition:all .2s;z-index:999}
+    .secret-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+
+    /*  =====  DEV MENU  =====  */
+    .dev-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:300px;color:#eee;display:none;flex-direction:column;gap:10px;z-index:1000}
+    .dev-menu.show{display:flex}
+    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}   /* drag handle */
+    .dev-title{font-size:1.1em;font-weight:bold;color:#87ceeb}
+    .dev-close{background:none;border:none;color:#eee;font-size:1.2em;cursor:pointer}
+    .dev-close:hover{color:#ff5c5c}
+    .dev-input{width:100%;padding:6px 8px;border-radius:4px;border:none;background:rgba(255,255,255,.1);color:#fff}
+    .dev-btn{padding:6px;border-radius:4px;border:none;background:#4682b4;color:#fff;cursor:pointer;transition:background .2s}
+    .dev-btn:hover{background:#5691c4}
+
+    /*  =====  MINIMISED BAR  =====  */
+    .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
+    .dev-min-bar:hover{background:rgba(255,255,255,.1)}
+
+    /*  =====  SHOP / CLICKER BOTTLES  =====  */
+    .shop-btn{margin-top:10px;padding:10px 20px;background:rgba(0,180,255,.2);border:2px solid #00b4ff;color:#00b4ff;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
+    .shop-btn:hover{background:rgba(0,180,255,.3);box-shadow:0 0 15px rgba(0,180,255,.5)}
+    .shop-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3000}
+    .shop-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:25px;width:340px;color:#eee;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto}
+    .shop-title{font-size:1.5em;text-align:center;color:#87ceeb;margin-bottom:10px}
+    .pack-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.1);border-radius:8px;padding:12px;cursor:pointer;transition:background .2s}
+    .pack-item:hover{background:rgba(255,255,255,.2)}
+    .pack-name{font-weight:600}
+    .pack-cost{color:#ffd700}
+    .pack-odds{font-size:.75em;opacity:.8}
+    .shop-close{align-self:flex-end;padding:4px 10px;background:#c44d4d;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .shop-close:hover{background:#d35e5e}
+    .view-collection-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#2ecc71;color:#fff;cursor:pointer;font-weight:bold}
+    .view-collection-btn:hover{background:#27ae60}
+
+    /*  =====  OPENING PACK  =====  */
+    .open-pack-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;justify-content:center;align-items:center;z-index:3100}
+    .open-pack-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:420px;color:#eee;display:flex;flex-direction:column;gap:15px}
+    .open-pack-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
+    .cards-reveal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px}
+    .card-item{text-align:center;background:rgba(255,255,255,.1);border-radius:8px;padding:10px;border:2px solid transparent;transition:border .2s}
+    .card-item.godly{border-color:#ffd700;box-shadow:0 0 12px #ffd700}
+    .card-item.legendary{border-color:#ff33a8;box-shadow:0 0 10px #ff33a8}
+    .card-item.epic{border-color:#9b59b6;box-shadow:0 0 8px #9b59b6}
+    .card-item.rare{border-color:#3498db;box-shadow:0 0 6px #3498db}
+    .card-item.common{border-color:#95a5a6;box-shadow:0 0 4px #95a5a6}
+    .card-emoji{font-size:2.2em;margin-bottom:4px}
+    .card-name{font-weight:600;font-size:.9em}
+    .card-rarity{font-size:.75em;opacity:.8;margin:2px 0}
+    .card-value{font-size:.8em;color:#ffd700}
+    .card-actions{display:flex;gap:6px;margin-top:6px}
+    .card-actions button{flex:1;padding:4px 6px;border:none;border-radius:4px;cursor:pointer;font-size:.75em;font-weight:bold}
+    .sell-btn{background:#e74c3c;color:#fff}
+    .keep-btn{background:#27ae60;color:#fff}
+    .finish-open-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#4682b4;color:#fff;cursor:pointer;font-weight:bold}
+    .finish-open-btn:hover{background:#5691c4}
+
+    /*  =====  COLLECTION VIEW  =====  */
+    .collection-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3200}
+    .collection-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:400px;color:#eee;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto}
+    .collection-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
+    .collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .collection-card{text-align:center;background:rgba(255,255,255,.1);border-radius:6px;padding:8px;border:2px solid transparent;transition:border .2s}
+    .collection-card.godly{border-color:#ffd700;box-shadow:0 0 10px #ffd700}
+    .collection-card.legendary{border-color:#ff33a8;box-shadow:0 0 8px #ff33a8}
+    .collection-card.epic{border-color:#9b59b6;box-shadow:0 0 6px #9b59b6}
+    .collection-card.rare{border-color:#3498db;box-shadow:0 0 4px #3498db}
+    .collection-card.common{border-color:#95a5a6;box-shadow:0 0 3px #95a5a6}
+    .collection-emoji{font-size:1.8em}
+    .collection-name{font-size:.75em;font-weight:600;margin-top:4px}
+    .collection-sell-btn{margin-top:4px;padding:4px 6px;border:none;border-radius:4px;background:#e74c3c;color:#fff;cursor:pointer;font-size:.7em;font-weight:bold}
+    .collection-close{align-self:flex-end;padding:4px 10px;background:#c44d4d;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .collection-close:hover{background:#d35e5e}
+
+    /*  =====  CLICKER SELECT  =====  */
+    .clicker-select{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .clicker-btn{padding:6px 10px;border:1px solid rgba(255,255,255,.3);border-radius:6px;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:.8em;font-weight:bold;transition:all .2s}
+    .clicker-btn:hover{background:rgba(255,255,255,.2)}
+    .clicker-btn.active{border-color:#ffd700;box-shadow:0 0 8px #ffd700}
+    .calvin-face{width:100%;height:100%;object-fit:cover;border-radius:25px 25px 50px 50px}
+  </style>
+</head>
+
+<body>
+  <!--  floating droplets  -->
+  <div class="floating-water" style="top:10%;left:10%;">💧</div>
+  <div class="floating-water" style="top:20%;right:15%;animation-delay:3s;">💧</div>
+  <div class="floating-water" style="bottom:30%;left:20%;animation-delay:6s;">💧</div>
+  <div class="floating-water" style="bottom:10%;right:10%;animation-delay:9s;">💧</div>
+
+  <!--  SECRET CODE BUTTON  -->
+  <button class="secret-btn" onclick="askSecretCode()">Secret Code</button>
+
+  <!--  DEV MENU  -->
+  <div class="dev-menu" id="devMenu">
+    <div class="dev-header" id="devHeader">
+      <span class="dev-title">🛠️ Dev Menu</span>
+      <button class="dev-close" onclick="toggleDev(false)">×</button>
+    </div>
+
+    <label>Set Water</label>
+    <input type="number" class="dev-input" id="devWater" min="0" value="0">
+    <button class="dev-btn" onclick="setWater()">Apply</button>
+
+    <label>Set Click Power</label>
+    <input type="number" class="dev-input" id="devClickPower" min="1" value="1">
+    <button class="dev-btn" onclick="setClickPower()">Apply</button>
+
+    <label>Set Multiplier</label>
+    <input type="number" class="dev-input" id="devMult" min="0.1" step="0.1" value="1">
+    <button class="dev-btn" onclick="setMult()">Apply</button>
+
+    <label>Set Auto/sec</label>
+    <input type="number" class="dev-input" id="devAuto" min="0" value="0">
+    <button class="dev-btn" onclick="setAuto()">Apply</button>
+
+    <label>Set Clicks</label>
+    <input type="number" class="dev-input" id="devClicks" min="0" value="0">
+    <button class="dev-btn" onclick="setClicks()">Apply</button>
+
+    <button class="dev-btn" onclick="instantPrestige()">Instant Prestige (+0.1×)</button>
+    <button class="dev-btn" onclick="devReset()">Dev Hard Reset</button>
+    <button class="dev-btn" onclick="devGiveCard()">Give Any Card</button>
+  </div>
+
+  <!--  MINIMISED BAR  -->
+  <div class="dev-min-bar" id="devMinBar" onclick="restoreDev()">🛠️ Dev Menu</div>
+
+  <!--  GAMBLE MODAL  -->
+  <div class="gamble-modal" id="gambleModal" style="display:none">
+    <div class="gamble-box">
+      <div class="gamble-title">💰 Water Gamble</div>
+      <div class="gamble-option" onclick="selectGamble(2)">
+        <div>
+          <div class="gamble-label">Safe Bet</div>
+          <div class="gamble-chance">80 % chance</div>
+        </div>
+        <div class="gamble-mult">2×</div>
+      </div>
+      <div class="gamble-option" onclick="selectGamble(5)">
+        <div>
+          <div class="gamble-label">Risky Bet</div>
+          <div class="gamble-chance">40 % chance</div>
+        </div>
+        <div class="gamble-mult">5×</div>
+      </div>
+      <div class="gamble-option" onclick="selectGamble(10)">
+        <div>
+          <div class="gamble-label">High Roller</div>
+          <div class="gamble-chance">20 % chance</div>
+        </div>
+        <div class="gamble-mult">10×</div>
+      </div>
+      <input type="number" class="gamble-input" id="gambleAmount" min="1" placeholder="Amount to wager">
+      <div class="gamble-btns">
+        <button class="gamble-btn gamble-roll" onclick="rollGamble()">Roll</button>
+        <button class="gamble-btn gamble-close" onclick="closeGamble()">Close</button>
+      </div>
+      <div class="gamble-result" id="gambleResult"></div>
+    </div>
+  </div>
+
+  <!--  SHOP MODAL  -->
+  <div class="shop-modal" id="shopModal" style="display:none">
+    <div class="shop-box">
+      <div class="shop-title">🛍️ Shop</div>
+      <button class="shop-close" onclick="closeShop()">Close</button>
+
+      <!--  Card Packs  -->
+      <div class="pack-item" onclick="buyPack('common')">
+        <div>
+          <div class="pack-name">Common Pack</div>
+          <div class="pack-odds">75% Common | 20% Rare | 5% Epic</div>
+        </div>
+        <div class="pack-cost">250 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyPack('rare')">
+        <div>
+          <div class="pack-name">Rare Pack</div>
+          <div class="pack-odds">60% Rare | 30% Epic | 10% Legendary</div>
+        </div>
+        <div class="pack-cost">1 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyPack('legendary')">
+        <div>
+          <div class="pack-name">Legendary Pack</div>
+          <div class="pack-odds">50% Epic | 35% Legendary | 0.0000001% ULTAMATE</div>
+        </div>
+        <div class="pack-cost">10 000 💧</div>
+      </div>
+
+      <!--  Clicker Bottles  -->
+      <div class="pack-item" onclick="buyClicker('water')">
+        <div>
+          <div class="pack-name">Classic Water</div>
+          <div class="pack-odds">The original 💧</div>
+        </div>
+        <div class="pack-cost">Free</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('dietcoke')">
+        <div>
+          <div class="pack-name">Diet Coke</div>
+          <div class="pack-odds">Black fizz power</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('sprite')">
+        <div>
+          <div class="pack-name">Sprite</div>
+          <div class="pack-odds">Crystal-clear fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('oj')">
+        <div>
+          <div class="pack-name">Orange Juice</div>
+          <div class="pack-odds">Orange + fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('drpepper')">
+        <div>
+          <div class="pack-name">Dr Pepper</div>
+          <div class="pack-odds">Mystery fizz</div>
+        </div>
+        <div class="pack-cost">5 000 💧</div>
+      </div>
+
+      <!--  Custom Character Clickers  -->
+      <div class="pack-item" onclick="buyClicker('calvin')">
+        <div>
+          <div class="pack-name">Calvin Clicker</div>
+          <div class="pack-odds">Golden face bottle</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('dawson')">
+        <div>
+          <div class="pack-name">Dawson Clicker</div>
+          <div class="pack-odds">Golden liquid</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyClicker('cj')">
+        <div>
+          <div class="pack-name">CJ Clicker</div>
+          <div class="pack-odds">Golden shine</div>
+        </div>
+        <div class="pack-cost">50 000 💧</div>
+      </div>
+
+      <button class="view-collection-btn" onclick="openCollection()">📂 View Collection</button>
+    </div>
+  </div>
+
+  <!--  OPENING PACK  -->
+  <div class="open-pack-modal" id="openPackModal" style="display:none">
+    <div class="open-pack-box">
+      <div class="open-pack-title">Opening Pack...</div>
+      <div class="cards-reveal" id="cardsReveal"></div>
+      <button class="finish-open-btn" onclick="finishOpenPack()">Done</button>
+    </div>
+  </div>
+
+  <!--  COLLECTION VIEW  -->
+  <div class="collection-modal" id="collectionModal" style="display:none">
+    <div class="collection-box">
+      <div class="collection-title">Your Collection</div>
+      <button class="collection-close" onclick="closeCollection()">Close</button>
+      <div class="collection-grid" id="collectionGrid"></div>
+    </div>
+  </div>
+
+  <div class="game-container">
+    <h1 id="mainTitle">💧 Water Bottle Clicker</h1>
+    <div class="stats">
+      <div class="stat-box"><div class="stat-label">Water Collected</div><div class="stat-value" id="water-count">0</div></div>
+      <div class="stat-box"><div class="stat-label">Water per Click</div><div class="stat-value" id="water-per-click">1</div></div>
+      <div class="stat-box"><div class="stat-label">Auto Collection</div><div class="stat-value" id="auto-rate">0</div></div>
+      <div class="stat-box"><div class="stat-label">Total Clicks</div><div class="stat-value" id="total-clicks">0</div></div>
+      <div class="stat-box" id="multiplier-box" style="display:none"><div class="stat-label">Multiplier</div><div class="stat-value" id="multiplier">1.0×</div></div>
+    </div>
+
+    <div class="game-area">
+      <div class="bottle-section">
+        <div class="water-bottle" id="water-bottle">
+          <div class="bottle-cap"></div>
+          <div class="bottle-body" id="bottleBody">
+            <div class="fizz" id="fizzLayer"></div>
+            <div class="water-level" id="water-level"><div class="water-surface"></div></div>
+          </div>
+        </div>
+        <p style="margin-top:25px;opacity:.8;font-size:1.1em;">Click the bottle to collect water!</p>
+        <div class="prestige-wrap" id="prestige-wrap">
+          <button class="prestige-btn" onclick="prestige()">Prestige (reset for +0.1× multiplier)</button>
+        </div>
+        <button class="prestige-btn" style="margin-top:10px" onclick="openGamble()">💰 Water Gamble</button>
+        <button class="shop-btn" onclick="openShop()">🛍️ Shop</button>
+      </div>
+
+      <div class="upgrades-section">
+        <h2 class="upgrades-title">💪 Upgrades</h2>
+        <div id="upgrades-container"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Made by Calvin Crouch<br>
+      <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+    </div>
+  </div>
+
+  <script>
+    //  =====  SAVE / LOAD  =====
+    function loadGame(){
+      const s=localStorage.getItem('waterClickerSave');
+      if(s){
+        const l=JSON.parse(s);
+        gameState={...gameState,...l};
+        gameState.upgrades={...gameState.upgrades,...l.upgrades};
+        if(l.collection) gameState.collection=l.collection;
+        if(l.ownedClickers) gameState.ownedClickers=l.ownedClickers;
+        if(l.activeClicker) gameState.activeClicker=l.activeClicker;
+      }
+    }
+    function saveGame(){
+      localStorage.setItem('waterClickerSave',JSON.stringify(gameState));
+    }
+
+    //  =====  GAME STATE  =====
+    let gameState={
+      water:0,
+      totalClicks:0,
+      waterPerClick:1,
+      autoRate:0,
+      multiplier:1,
+      totalWaterAllTime:0,
+      collection:[],
+      ownedClickers:['water'],
+      activeClicker:'water',
+      upgrades:{
+        betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick+=1}},
+        autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1}},
+        biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=2}},
+        megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=10}},
+        superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=3}},
+        waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=100}},
+        oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1000}}
+      }
+    };
+
+    //  =====  CLICKER CONFIGS  =====
+    const clickerData={
+      water:{name:'Water Bottle',liquid:'linear-gradient(to top,#0066cc,#0099ff,#33ccff)',fizz:true,cost:0},
+      dietcoke:{name:'Diet Coke',liquid:'linear-gradient(to top,#111,#222,#111)',fizz:true,cost:5000},
+      sprite:{name:'Sprite',liquid:'linear-gradient(to top,#f6f6f6,#fff,#f6f6f6)',fizz:true,cost:5000},
+      oj:{name:'Orange Juice',liquid:'linear-gradient(to top,#ff8c00,#ffa500,#ff8c00)',fizz:true,cost:5000},
+      drpepper:{name:'Dr Pepper',liquid:'linear-gradient(to top,#2a1a1a,#3a2a2a,#2a1a1a)',fizz:true,cost:5000},
+      calvin:{name:'Calvin',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000,face:true},
+      dawson:{name:'Dawson',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000},
+      cj:{name:'CJ',liquid:'linear-gradient(to top,#ffd700,#ffed4e,#ffd700)',fizz:true,cost:50000}
+    };
+
+    //  =====  CARD DATA  =====
+    const cardData={
+      common:[
+        {name:"Dropplet",emoji:"💧",value:10},
+        {name:"Ice Cube",emoji:"🧊",value:15},
+        {name:"Water Gun",emoji:"🔫",value:20}
+      ],
+      rare:[
+        {name:"Wave",emoji:"🌊",value:50},
+        {name:"Fountain",emoji:"⛲",value:60},
+        {name:"Waterfall",emoji:"🏞️",value:70}
+      ],
+      epic:[
+        {name:"Storm",emoji:"⛈️",value:150},
+        {name:"Whirlpool",emoji:"🌀",value:200},
+        {name:"Tsunami",emoji:"🌊",value:250}
+      ],
+      legendary:[
+        {name:"Atlantis",emoji:"🏰",value:1000},
+        {name:"Poseidon",emoji:"🧜‍♂️",value:1500},
+        {name:"Leviathan",emoji:"🐉",value:2000}
+      ],
+      ULTAMATE:[
+        {name:"The One And Only Jellybean",emoji:"👑",value:Infinity},
+        {name:"Infinity Droplet",emoji:"♾️",value:1e9},
+        {name:"Eternal Wave",emoji:"🌊",value:5e8},
+        {name:"Galaxy Ocean",emoji:"🌌",value=2e8},
+        {name:"Chaos Vial",emoji:"🧪",value=1e8}
+      ]
+    };
+
+    //  =====  UTILS  =====
+    function formatNumber(n){
+      if(n>=1e9)return(n/1e9).toFixed(2)+'B';
+      if(n>=1e6)return(n/1e6).toFixed(2)+'M';
+      if(n>=1e3)return(n/1e3).toFixed(2)+'K';
+      return Math.floor(n).toString();
+    }
+
+    //  =====  DISPLAY  =====
+    function updateDisplay(){
+      const m=gameState.multiplier;
+      document.getElementById('water-count').textContent=formatNumber(gameState.water);
+      document.getElementById('water-per-click').textContent=formatNumber(gameState.waterPerClick*m);
+      document.getElementById('auto-rate').textContent=formatNumber(gameState.autoRate*m);
+      document.getElementById('total-clicks').textContent=formatNumber(gameState.totalClicks);
+      document.getElementById('multiplier').textContent=m.toFixed(1)+'×';
+
+      if(gameState.totalWaterAllTime>=10000){
+        document.getElementById('multiplier-box').style.display='block';
+        document.getElementById('prestige-wrap').style.display='block';
+      }
+      const newMult=1+Math.floor(gameState.totalWaterAllTime/10000)*0.1;
+      if(newMult>gameState.multiplier){
+        gameState.multiplier=newMult;
+        document.getElementById('multiplier').textContent=newMult.toFixed(1)+'×';
+      }
+
+      const lvl=document.getElementById('water-level');
+      const p=Math.min((gameState.water%2000)/2000*100,100);
+      lvl.style.height=`${p}%`;
+    }
+
+    //  =====  CLICKER VISUALS  =====
+    function applyClicker(){
+      const cfg=clickerData[gameState.activeClicker];
+      document.getElementById('pageTitle').textContent=`${cfg.emoji} ${cfg.name} Clicker`;
+      document.getElementById('mainTitle').textContent=`${cfg.emoji} ${cfg.name} Clicker`;
+      const body=document.getElementById('bottleBody');
+      body.style.background=cfg.liquid;
+      const fizz=document.getElementById('fizzLayer');
+      fizz.style.display=cfg.fizz?'block':'none';
+      if(cfg.face){
+        body.innerHTML='<img class="calvin-face" src="PUT_CALVIN_FACE_URL_HERE" alt="Calvin"><div class="fizz" id="fizzLayer"></div><div class="water-level" id="waterLevel"><div class="water-surface"></div></div>';
+        document.getElementById('fizzLayer').style.display='block';
+      }else{
+        body.innerHTML='<div class="fizz" id="fizzLayer"></div><div class="water-level" id="waterLevel"><div class="water-surface"></div></div>';
+        document.getElementById('fizzLayer').style.display=cfg.fizz?'block':'none';
+      }
+      document.getElementById('waterLevel').style.bottom='0';
+    }
+
+    //  =====  CLICK  =====
+    document.getElementById('water-bottle').addEventListener('click',function(e){
+      const gained=gameState.waterPerClick*gameState.multiplier;
+      gameState.water+=gained;
+      gameState.totalWaterAllTime+=gained;
+      gameState.totalClicks+=1;
+      createClickEffect(e.clientX,e.clientY);
+      updateDisplay();
+      renderUpgrades();
+      saveGame();
+    });
+
+    function createClickEffect(x,y){
+      const d=document.createElement('div');
+      d.className='click-effect';
+      d.textContent=`+${formatNumber(gameState.waterPerClick*gameState.multiplier)}`;
+      d.style.left=`${x}px`;
+      d.style.top=`${y}px`;
+      document.body.appendChild(d);
+      setTimeout(()=>d.remove(),1500);
+    }
+
+    //  =====  UPGRADES  =====
+    function renderUpgrades(){
+      const c=document.getElementById('upgrades-container');
+      c.innerHTML='';
+      const m=gameState.multiplier;
+      for(const[k,u]of Object.entries(gameState.upgrades)){
+        const can=gameState.water>=u.cost, max=u.owned>=u.maxLevel, prog=(u.owned/u.maxLevel)*100;
+        const div=document.createElement('div');
+        div.className='upgrade-item'+(can&&!max?'':' disabled')+(u.owned>0?' purchased':'');
+        div.innerHTML=`
+          <div class="upgrade-left">
+            <div class="upgrade-name">${u.name}</div>
+            <div class="upgrade-description">${u.description}</div>
+          </div>
+          <div class="upgrade-right">
+            <div class="upgrade-cost">${max?'MAX':`${formatNumber(u.cost)} 💧`}</div>
+            ${u.owned?`<div class="upgrade-owned">Lv.${u.owned}</div>`:''}
+          </div>
+          <div class="upgrade-progress"><div class="upgrade-progress-bar" style="width:${prog}%"></div></div>
+        `;
+        div.addEventListener('click',()=>purchaseUpgrade(k));
+        c.appendChild(div);
+      }
+    }
+
+    function purchaseUpgrade(k){
+      const u=gameState.upgrades[k];
+      if(gameState.water>=u.cost&&u.owned<u.maxLevel){
+        gameState.water-=u.cost;
+        u.owned+=1;
+        u.effect();
+        u.cost=Math.floor(u.cost*(1.8+u.owned*.1));
+        updateDisplay();
+        renderUpgrades();
+        saveGame();
+      }
+    }
+
+    //  =====  PRESTIGE  =====
+    function prestige(){
+      if(gameState.totalWaterAllTime<10000)return alert('Need at least 10 000 total water to prestige!');
+      const newMult=1+Math.floor(gameState.totalWaterAllTime/10000)*0.1;
+      if(!confirm(`Prestige now for an extra +0.1× multiplier?\nYou will restart with ${newMult.toFixed(1)}× permanently.`))return;
+
+      gameState={
+        water:0,
+        totalClicks:0,
+        waterPerClick:1,
+        autoRate:0,
+        multiplier:newMult,
+        totalWaterAllTime:0,
+        collection:[],
+        ownedClickers:['water'],
+        activeClicker:'water',
+        upgrades:{
+          betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick+=1}},
+          autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1}},
+          biggerBottle:      {name:"Bigger Bottle",description:"Double per click",cost:500,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=2}},
+          megaDropper:       {name:"Mega Dropper",description:"+10/sec auto",cost:2000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=10}},
+          superClick:        {name:"Super Click",description:"Triple per click",cost:5000,owned:0,maxLevel:999,effect:()=>{gameState.waterPerClick*=3}},
+          waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=100}},
+          oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:999,effect:()=>{gameState.autoRate+=1000}}
+        }
+      };
+      saveGame();
+      updateDisplay();
+      renderUpgrades();
+      applyClicker();
+    }
+
+    //  =====  RESET  =====
+    function resetGame(){
+      if(!confirm('Erase ALL progress (including multiplier & cards & clickers) and start over?'))return;
+      localStorage.removeItem('waterClickerSave');
+      location.reload();
+    }
+
+    //  =====  AUTO  =====
+    setInterval(()=>{
+      if(gameState.autoRate>0){
+        const gained=gameState.autoRate*gameState.multiplier/10;
+        gameState.water+=gained;
+        gameState.totalWaterAllTime+=gained;
+        updateDisplay();
+      }
+    },100);
+
+    setInterval(saveGame,15000);
+
+    //  =====  SECRET CODE SYSTEM  =====
+    const SECRET_CODE='calvinwashere';
+
+    function askSecretCode(){
+      const ans=prompt('Enter secret code:');
+      if(ans===SECRET_CODE){
+        toggleDev(true);
+      }else{
+        alert('Nope.');
+      }
+    }
+
+    //  =====  DEV MENU FUNCTIONS  =====
+    function setWater(){
+      const v=Number(document.getElementById('devWater').value);
+      if(v<0)return;
+      gameState.water=v;
+      updateDisplay();renderUpgrades();saveGame();
+    }
+    function setClickPower(){
+      const v=Number(document.getElementById('devClickPower').value);
+      if(v<1)return;
+      gameState.waterPerClick=v;
+      updateDisplay();saveGame();
+    }
+    function setMult(){
+      const v=Number(document.getElementById('devMult').value);
+      if(v<0.1)return;
+      gameState.multiplier=v;
+      updateDisplay();saveGame();
+    }
+    function setAuto(){
+      const v=Number(document.getElementById('devAuto').value);
+      if(v<0)return;
+      gameState.autoRate=v;
+      updateDisplay();saveGame();
+    }
+    function setClicks(){
+      const v=Number(document.getElementById('devClicks').value);
+      if(v<0)return;
+      gameState.totalClicks=v;
+      updateDisplay();saveGame();
+    }
+    function instantPrestige(){
+      gameState.totalWaterAllTime+=10000;
+      prestige();
+    }
+    function devReset(){
+      if(!confirm('Dev hard-reset everything?'))return;
+      localStorage.removeItem('waterClickerSave');
+      location.reload();
+    }
+    function devGiveCard(){
+      const rarities=['common','rare','epic','legendary','ULTAMATE'];
+      const r=prompt('Enter rarity (common/rare/epic/legendary/ULTAMATE):')?.toLowerCase();
+      if(!rarities.includes(r))return alert('Invalid rarity');
+      if(r==='ULTAMATE'){
+        const code=prompt('Enter ULTAMATE code:');
+        if(code!=='0717')return alert('Wrong code');
+      }
+      const pool=cardData[r];
+      const names=pool.map(c=>c.name).join(', ');
+      const pick=prompt(`Available ${r} cards:\n${names}\n\nType exact card name to add:`);
+      const card=pool.find(c=>c.name.toLowerCase()===pick.toLowerCase());
+      if(!card)return alert('Card not found');
+      gameState.collection.push({...card,rarity:r});
+      alert(`${card.name} added to collection!`);
+      saveGame();
+    }
+
+    //  =====  DEV MENU SHOW / HIDE / MINIMISE  =====
+    function toggleDev(show){
+      const d=document.getElementById('devMenu');
+      const b=document.getElementById('devMinBar');
+      if(show){
+        d.classList.add('show');
+        b.style.display='none';
+      }else{
+        d.classList.remove('show');
+        b.style.display='block';
+      }
+    }
+    function restoreDev(){
+      toggleDev(true);
+    }
+
+    //  =====  DRAG DEV MENU  =====
+    const devHdr=document.getElementById('devHeader');
+    const devMenu=document.getElementById('devMenu');
+    let dragging=false,offsetX=0,offsetY=0;
+
+    devHdr.addEventListener('mousedown',function(e){
+      dragging=true;
+      offsetX=e.clientX-devMenu.offsetLeft;
+      offsetY=e.clientY-devMenu.offsetTop;
+    });
+    document.addEventListener('mousemove',function(e){
+      if(!dragging)return;
+      devMenu.style.left=e.clientX-offsetX+'px';
+      devMenu.style.top=e.clientY-offsetY+'px';
+      devMenu.style.transform='none';
+    });
+    document.addEventListener('mouseup',()=>dragging=false);
+
+    //  =====  GAMBLE FUNCTIONS  =====
+    let chosenMult=2;
+    function openGamble(){
+      document.getElementById('gambleModal').style.display='flex';
+      document.getElementById('gambleResult').textContent='';
+      document.getElementById('gambleAmount').value='';
+    }
+    function closeGamble(){
+      document.getElementById('gambleModal').style.display='none';
+    }
+    function selectGamble(m){
+      chosenMult=m;
+      document.querySelectorAll('.gamble-option').forEach(opt=>opt.style.border='1px solid transparent');
+      document.querySelectorAll('.gamble-option')[m===2?0:m===5?1:2].style.border='1px solid #87ceeb';
+    }
+    function rollGamble(){
+      const amt=Number(document.getElementById('gambleAmount').value);
+      if(!amt||amt<=0||amt>gameState.water){
+        alert('Invalid or insufficient water!');
+        return;
+      }
+      const chances={2:0.8,5:0.4,10:0.2};
+      const win=Math.random()<chances[chosenMult];
+      const result=document.getElementById('gambleResult');
+      if(win){
+        const gain=amt*(chosenMult-1);
+        gameState.water+=gain;
+        gameState.totalWaterAllTime+=gain;
+        result.textContent=`You won! +${formatNumber(gain)} water`;
+        result.className='gamble-result gamble-win';
+      }else{
+        gameState.water-=amt;
+        result.textContent=`You lost ${formatNumber(amt)} water`;
+        result.className='gamble-result gamble-lose';
+      }
+      updateDisplay();
+      renderUpgrades();
+      saveGame();
+    }
+
+    //  =====  SHOP / CARD FUNCTIONS  =====
+    function openShop(){
+      document.getElementById('shopModal').style.display='flex';
+    }
+    function closeShop(){
+      document.getElementById('shopModal').style.display='none';
+    }
+    function buyPack(type){
+      const prices={common:250,rare:1000,legendary:10000};
+      const price=prices[type];
+      if(gameState.water<price)return alert('Not enough water!');
+      gameState.water-=price;
+      updateDisplay();
+      saveGame();
+      const cards=generatePack(type);
+      showPackOpening(cards);
+    }
+    function generatePack(type){
+      const cards=[];
+      const rng=Math.random;
+      for(let i=0;i<3;i++){
+        let r;
+        if(type==='common'){
+          r=rng()<0.75?'common':rng()<0.95?'rare':'epic';
+        }else if(type==='rare'){
+          r=rng()<0.6?'rare':rng()<0.9?'epic':'legendary';
+        }else{
+          r=rng()<0.5?'epic':rng()<0.85?'legendary':(rng()<0.000000001?'ULTAMATE':'legendary');
+        }
+        const pool=cardData[r];
+        const card=pool[Math.floor(Math.random()*pool.length)];
+        cards.push({...card,rarity:r});
+      }
+      return cards;
+    }
+    function showPackOpening(cards){
+      const reveal=document.getElementById('cardsReveal');
+      reveal.innerHTML='';
+      window.tempPackCards=cards;
+      cards.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`card-item ${card.rarity}`;
+        div.innerHTML=`
+          <div class="card-emoji">${card.emoji}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-rarity">${card.rarity.toUpperCase()}</div>
+          <div class="card-value">${card.value===Infinity?'∞':formatNumber(card.value)} 💧</div>
+          <div class="card-actions">
+            <button class="sell-btn" onclick="sellCardFromPack(${idx})">Sell</button>
+            <button class="keep-btn" onclick="keepCardFromPack(${idx})">Keep</button>
+          </div>
+        `;
+        reveal.appendChild(div);
+      });
+      document.getElementById('openPackModal').style.display='flex';
+    }
+    function sellCardFromPack(idx){
+      const card=window.tempPackCards[idx];
+      const val=card.value===Infinity?10000:card.value;
+      gameState.water+=val;
+      gameState.totalWaterAllTime+=val;
+      updateDisplay();
+      window.tempPackCards.splice(idx,1);
+      rerenderPack();
+    }
+    function keepCardFromPack(idx){
+      const card=window.tempPackCards[idx];
+      gameState.collection.push(card);
+      window.tempPackCards.splice(idx,1);
+      rerenderPack();
+    }
+    function rerenderPack(){
+      const cards=window.tempPackCards;
+      const reveal=document.getElementById('cardsReveal');
+      reveal.innerHTML='';
+      cards.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`card-item ${card.rarity}`;
+        div.innerHTML=`
+          <div class="card-emoji">${card.emoji}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-rarity">${card.rarity.toUpperCase()}</div>
+          <div class="card-value">${card.value===Infinity?'∞':formatNumber(card.value)} 💧</div>
+          <div class="card-actions">
+            <button class="sell-btn" onclick="sellCardFromPack(${idx})">Sell</button>
+            <button class="keep-btn" onclick="keepCardFromPack(${idx})">Keep</button>
+          </div>
+        `;
+        reveal.appendChild(div);
+      });
+      if(cards.length===0) finishOpenPack();
+    }
+    function finishOpenPack(){
+      document.getElementById('openPackModal').style.display='none';
+      saveGame();
+    }
+    function openCollection(){
+      renderCollection();
+      document.getElementById('collectionModal').style.display='flex';
+    }
+    function closeCollection(){
+      document.getElementById('collectionModal').style.display='none';
+    }
+    function renderCollection(){
+      const grid=document.getElementById('collectionGrid');
+      grid.innerHTML='';
+      if(gameState.collection.length===0){
+        grid.innerHTML='<div style="grid-column:1/-1;text-align:center;opacity:.7">No cards yet. Buy some packs!</div>';
+        return;
+      }
+      gameState.collection.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`collection-card ${card.rarity}`;
+        div.innerHTML=`
+          <div class="collection-emoji">${card.emoji}</div>
+          <div class="collection-name">${card.name}</div>
+          <button class="collection-sell-btn" onclick="sellCardFromCollection(${idx})">Sell ${card.value===Infinity?'∞':formatNumber(card.value)}</button>
+        `;
+        grid.appendChild(div);
+      });
+    }
+    function sellCardFromCollection(idx){
+      const card=gameState.collection[idx];
+      const val=card.value===Infinity?10000:card.value;
+      gameState.water+=val;
+      gameState.totalWaterAllTime+=val;
+      gameState.collection.splice(idx,1);
+      updateDisplay();
+      renderCollection();
+      saveGame();
+    }
+
+    //  =====  CLICKER SHOP  =====
+    function buyClicker(key){
+      if(gameState.ownedClickers.includes(key))return alert('Already owned!');
+      const cost=clickerData[key].cost;
+      if(gameState.water<cost)return alert('Not enough water!');
+      gameState.water-=cost;
+      gameState.ownedClickers.push(key);
+      gameState.activeClicker=key;
+      applyClicker();
+      updateDisplay();
+      saveGame();
+    }
+
+    //  =====  INIT  =====
+    loadGame();
+    updateDisplay();
+    renderUpgrades();
+    applyClicker();
   </script>
 
   <!--  satisfying water-drop sound  -->
