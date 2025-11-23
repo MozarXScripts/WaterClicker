@@ -60,7 +60,7 @@
     /*  =====  DEV MENU  =====  */
     .dev-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:300px;color:#eee;display:none;flex-direction:column;gap:10px;z-index:1000}
     .dev-menu.show{display:flex}
-    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}   /* drag handle */
+    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}
     .dev-title{font-size:1.1em;font-weight:bold;color:#87ceeb}
     .dev-close{background:none;border:none;color:#eee;font-size:1.2em;cursor:pointer}
     .dev-close:hover{color:#ff5c5c}
@@ -68,11 +68,7 @@
     .dev-btn{padding:6px;border-radius:4px;border:none;background:#4682b4;color:#fff;cursor:pointer;transition:background .2s}
     .dev-btn:hover{background:#5691c4}
 
-    /*  =====  MINIMISED BAR  =====  */
-    .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
-    .dev-min-bar:hover{background:rgba(255,255,255,.1)}
-
-    /*  =====  SHOP / CLICKER BOTTLES  =====  */
+    /*  =====  SHOP  =====  */
     .shop-btn{margin-top:10px;padding:10px 20px;background:rgba(0,180,255,.2);border:2px solid #00b4ff;color:#00b4ff;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
     .shop-btn:hover{background:rgba(0,180,255,.3);box-shadow:0 0 15px rgba(0,180,255,.5)}
     .shop-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3000}
@@ -88,7 +84,7 @@
     .view-collection-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#2ecc71;color:#fff;cursor:pointer;font-weight:bold}
     .view-collection-btn:hover{background:#27ae60}
 
-    /*  =====  OPENING PACK  =====  */
+    /*  =====  CARDS  =====  */
     .open-pack-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;justify-content:center;align-items:center;z-index:3100}
     .open-pack-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:420px;color:#eee;display:flex;flex-direction:column;gap:15px}
     .open-pack-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
@@ -342,7 +338,7 @@
           <div class="bottle-cap"></div>
           <div class="bottle-body" id="bottleBody">
             <div class="fizz" id="fizzLayer"></div>
-            <div class="water-level" id="water-level"><div class="water-surface"></div></div>
+            <div class="water-level" id="waterLevel"><div class="water-surface"></div></div>
           </div>
         </div>
         <p style="margin-top:25px;opacity:.8;font-size:1.1em;">Click the bottle to collect water!</p>
@@ -442,8 +438,8 @@
         {name:"The One And Only Jellybean",emoji:"👑",value:Infinity},
         {name:"Infinity Droplet",emoji:"♾️",value:1e9},
         {name:"Eternal Wave",emoji:"🌊",value:5e8},
-        {name:"Galaxy Ocean",emoji:"🌌",value=2e8},
-        {name:"Chaos Vial",emoji:"🧪",value=1e8}
+        {name:"Galaxy Ocean",emoji:"🌌",value:2e8},
+        {name:"Chaos Vial",emoji:"🧪",value:1e8}
       ]
     };
 
@@ -474,7 +470,7 @@
         document.getElementById('multiplier').textContent=newMult.toFixed(1)+'×';
       }
 
-      const lvl=document.getElementById('water-level');
+      const lvl=document.getElementById('waterLevel');
       const p=Math.min((gameState.water%2000)/2000*100,100);
       lvl.style.height=`${p}%`;
     }
@@ -1004,7 +1000,7 @@
     /*  =====  DEV MENU  =====  */
     .dev-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:300px;color:#eee;display:none;flex-direction:column;gap:10px;z-index:1000}
     .dev-menu.show{display:flex}
-    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}   /* drag handle */
+    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}
     .dev-title{font-size:1.1em;font-weight:bold;color:#87ceeb}
     .dev-close{background:none;border:none;color:#eee;font-size:1.2em;cursor:pointer}
     .dev-close:hover{color:#ff5c5c}
@@ -1012,11 +1008,7 @@
     .dev-btn{padding:6px;border-radius:4px;border:none;background:#4682b4;color:#fff;cursor:pointer;transition:background .2s}
     .dev-btn:hover{background:#5691c4}
 
-    /*  =====  MINIMISED BAR  =====  */
-    .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
-    .dev-min-bar:hover{background:rgba(255,255,255,.1)}
-
-    /*  =====  SHOP / CLICKER BOTTLES  =====  */
+    /*  =====  SHOP  =====  */
     .shop-btn{margin-top:10px;padding:10px 20px;background:rgba(0,180,255,.2);border:2px solid #00b4ff;color:#00b4ff;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
     .shop-btn:hover{background:rgba(0,180,255,.3);box-shadow:0 0 15px rgba(0,180,255,.5)}
     .shop-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3000}
@@ -1032,7 +1024,7 @@
     .view-collection-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#2ecc71;color:#fff;cursor:pointer;font-weight:bold}
     .view-collection-btn:hover{background:#27ae60}
 
-    /*  =====  OPENING PACK  =====  */
+    /*  =====  CARDS  =====  */
     .open-pack-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;justify-content:center;align-items:center;z-index:3100}
     .open-pack-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:420px;color:#eee;display:flex;flex-direction:column;gap:15px}
     .open-pack-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
@@ -1286,7 +1278,7 @@
           <div class="bottle-cap"></div>
           <div class="bottle-body" id="bottleBody">
             <div class="fizz" id="fizzLayer"></div>
-            <div class="water-level" id="water-level"><div class="water-surface"></div></div>
+            <div class="water-level" id="waterLevel"><div class="water-surface"></div></div>
           </div>
         </div>
         <p style="margin-top:25px;opacity:.8;font-size:1.1em;">Click the bottle to collect water!</p>
@@ -1386,8 +1378,8 @@
         {name:"The One And Only Jellybean",emoji:"👑",value:Infinity},
         {name:"Infinity Droplet",emoji:"♾️",value:1e9},
         {name:"Eternal Wave",emoji:"🌊",value:5e8},
-        {name:"Galaxy Ocean",emoji:"🌌",value=2e8},
-        {name:"Chaos Vial",emoji:"🧪",value=1e8}
+        {name:"Galaxy Ocean",emoji:"🌌",value:2e8},
+        {name:"Chaos Vial",emoji:"🧪",value:1e8}
       ]
     };
 
@@ -1418,7 +1410,7 @@
         document.getElementById('multiplier').textContent=newMult.toFixed(1)+'×';
       }
 
-      const lvl=document.getElementById('water-level');
+      const lvl=document.getElementById('waterLevel');
       const p=Math.min((gameState.water%2000)/2000*100,100);
       lvl.style.height=`${p}%`;
     }
