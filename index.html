@@ -69,6 +69,26 @@
     /*  =====  MINIMISED BAR  =====  */
     .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
     .dev-min-bar:hover{background:rgba(255,255,255,.1)}
+
+    /*  =====  GAMBLE MODAL  =====  */
+    .gamble-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;justify-content:center;align-items:center;z-index:2000}
+    .gamble-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:25px;width:320px;color:#eee;display:flex;flex-direction:column;gap:12px}
+    .gamble-title{font-size:1.4em;text-align:center;color:#87ceeb;margin-bottom:10px}
+    .gamble-option{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;cursor:pointer;transition:background .2s}
+    .gamble-option:hover{background:rgba(255,255,255,.2)}
+    .gamble-label{font-weight:600}
+    .gamble-chance{font-size:.85em;opacity:.8}
+    .gamble-mult{color:#ffd700;font-weight:bold}
+    .gamble-input{width:100%;padding:8px;border-radius:6px;border:none;background:rgba(255,255,255,.1);color:#fff;margin-top:8px}
+    .gamble-btns{display:flex;gap:10px;margin-top:10px}
+    .gamble-btn{flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;transition:background .2s}
+    .gamble-roll{background:#4682b4;color:#fff}
+    .gamble-roll:hover{background:#5691c4}
+    .gamble-close{background:#c44d4d;color:#fff}
+    .gamble-close:hover{background:#d35e5e}
+    .gamble-result{text-align:center;margin-top:8px;font-size:1.1em}
+    .gamble-win{color:#00ff88}
+    .gamble-lose{color:#ff5c5c}
   </style>
 </head>
 
@@ -116,6 +136,40 @@
   <!--  MINIMISED BAR  -->
   <div class="dev-min-bar" id="devMinBar" onclick="restoreDev()">🛠️ Dev Menu</div>
 
+  <!--  GAMBLE MODAL  -->
+  <div class="gamble-modal" id="gambleModal" style="display:none">
+    <div class="gamble-box">
+      <div class="gamble-title">💰 Water Gamble</div>
+      <div class="gamble-option" onclick="selectGamble(2)">
+        <div>
+          <div class="gamble-label">Safe Bet</div>
+          <div class="gamble-chance">80 % chance</div>
+        </div>
+        <div class="gamble-mult">2×</div>
+      </div>
+      <div class="gamble-option" onclick="selectGamble(5)">
+        <div>
+          <div class="gamble-label">Risky Bet</div>
+          <div class="gamble-chance">40 % chance</div>
+        </div>
+        <div class="gamble-mult">5×</div>
+      </div>
+      <div class="gamble-option" onclick="selectGamble(10)">
+        <div>
+          <div class="gamble-label">High Roller</div>
+          <div class="gamble-chance">20 % chance</div>
+        </div>
+        <div class="gamble-mult">10×</div>
+      </div>
+      <input type="number" class="gamble-input" id="gambleAmount" min="1" placeholder="Amount to wager">
+      <div class="gamble-btns">
+        <button class="gamble-btn gamble-roll" onclick="rollGamble()">Roll</button>
+        <button class="gamble-btn gamble-close" onclick="closeGamble()">Close</button>
+      </div>
+      <div class="gamble-result" id="gambleResult"></div>
+    </div>
+  </div>
+
   <div class="game-container">
     <h1>💧 Water Bottle Clicker 💧</h1>
     <div class="stats">
@@ -138,6 +192,8 @@
         <div class="prestige-wrap" id="prestige-wrap">
           <button class="prestige-btn" onclick="prestige()">Prestige (reset for +0.1× multiplier)</button>
         </div>
+        <!--  NEW GAMBLE BUTTON  -->
+        <button class="prestige-btn" style="margin-top:10px" onclick="openGamble()">💰 Water Gamble</button>
       </div>
 
       <div class="upgrades-section">
@@ -411,51 +467,88 @@
     });
     document.addEventListener('mouseup',()=>dragging=false);
 
+    //  =====  GAMBLE FUNCTIONS  =====
+    let chosenMult=2;
+    function openGamble(){
+      document.getElementById('gambleModal').style.display='flex';
+      document.getElementById('gambleResult').textContent='';
+      document.getElementById('gambleAmount').value='';
+    }
+    function closeGamble(){
+      document.getElementById('gambleModal').style.display='none';
+    }
+    function selectGamble(m){
+      chosenMult=m;
+      // visual feedback
+      document.querySelectorAll('.gamble-option').forEach(opt=>opt.style.border='1px solid transparent');
+      document.querySelectorAll('.gamble-option')[m===2?0:m===5?1:2].style.border='1px solid #87ceeb';
+    }
+    function rollGamble(){
+      const amt=Number(document.getElementById('gambleAmount').value);
+      if(!amt||amt<=0||amt>gameState.water){
+        alert('Invalid or insufficient water!');
+        return;
+      }
+      const chances={2:0.8,5:0.4,10:0.2};
+      const win=Math.random()<chances[chosenMult];
+      const result=document.getElementById('gambleResult');
+      if(win){
+        const gain=amt*(chosenMult-1);
+        gameState.water+=gain;
+        gameState.totalWaterAllTime+=gain;
+        result.textContent=`You won! +${formatNumber(gain)} water`;
+        result.className='gamble-result gamble-win';
+      }else{
+        gameState.water-=amt;
+        result.textContent=`You lost ${formatNumber(amt)} water`;
+        result.className='gamble-result gamble-lose';
+      }
+      updateDisplay();
+      renderUpgrades();
+      saveGame();
+    }
+
     //  =====  INIT  =====
     loadGame();
     updateDisplay();
     renderUpgrades();
   </script>
+
+  <!--  satisfying water-drop sound  -->
+  <script>
+    const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    function playWater(){
+      const now=audioCtx.currentTime;
+      const drop=audioCtx.createOscillator();
+      const dropG=audioCtx.createGain();
+      drop.type='sine';
+      drop.frequency.setValueAtTime(900,now);
+      drop.frequency.exponentialRampToValueAtTime(350,now+0.1);
+      dropG.gain.setValueAtTime(0.25,now);
+      dropG.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
+      drop.connect(dropG);
+      dropG.connect(audioCtx.destination);
+      drop.start(); drop.stop(now+0.13);
+
+      const noise=audioCtx.createBufferSource();
+      const noiseG=audioCtx.createGain();
+      const filter=audioCtx.createBiquadFilter();
+      const buffer=audioCtx.createBuffer(1, audioCtx.sampleRate*0.08, audioCtx.sampleRate);
+      const data=buffer.getChannelData(0);
+      for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
+      noise.buffer=buffer;
+      filter.type='bandpass';
+      filter.frequency.value=1200;
+      filter.Q.value=0.8;
+      noiseG.gain.setValueAtTime(0.08,now);
+      noiseG.gain.exponentialRampToValueAtTime(0.0001,now+0.08);
+      noise.connect(filter); filter.connect(noiseG); noiseG.connect(audioCtx.destination);
+      noise.start(); noise.stop(now+0.08);
+    }
+    document.getElementById('water-bottle').addEventListener('click',()=>{
+      if(audioCtx.state==='suspended')audioCtx.resume();
+      playWater();
+    });
+  </script>
 </body>
 </html>
-<script>
-/*  satisfying water-drop  */
-const audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-function playWater(){
-  const now=audioCtx.currentTime;
-  // drop layer
-  const drop=audioCtx.createOscillator();
-  const dropG=audioCtx.createGain();
-  drop.type='sine';
-  drop.frequency.setValueAtTime(900,now);
-  drop.frequency.exponentialRampToValueAtTime(350,now+0.1);
-  dropG.gain.setValueAtTime(0.25,now);
-  dropG.gain.exponentialRampToValueAtTime(0.0001,now+0.12);
-  drop.connect(dropG);
-  dropG.connect(audioCtx.destination);
-  drop.start(); drop.stop(now+0.13);
-
-  // splash layer (filtered noise)
-  const noise=audioCtx.createBufferSource();
-  const noiseG=audioCtx.createGain();
-  const filter=audioCtx.createBiquadFilter();
-  const buffer=audioCtx.createBuffer(1, audioCtx.sampleRate*0.08, audioCtx.sampleRate);
-  const data=buffer.getChannelData(0);
-  for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
-  noise.buffer=buffer;
-  filter.type='bandpass';
-  filter.frequency.value=1200;
-  filter.Q.value=0.8;
-  noiseG.gain.setValueAtTime(0.08,now);
-  noiseG.gain.exponentialRampToValueAtTime(0.0001,now+0.08);
-  noise.connect(filter); filter.connect(noiseG); noiseG.connect(audioCtx.destination);
-  noise.start(); noise.stop(now+0.08);
-}
-
-/*  hook to bottle  */
-document.getElementById('water-bottle').addEventListener('click',()=>{
-  if(audioCtx.state==='suspended')audioCtx.resume();
-  playWater();
-});
-</script>
-<script>
