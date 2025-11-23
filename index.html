@@ -7,7 +7,7 @@
   <style>
     /*  =====  same glassy base  =====  */
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white;overflow:hidden}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white}
     .game-container{background:rgba(255,255,255,.05);backdrop-filter:blur(15px);border-radius:25px;padding:40px;box-shadow:0 25px 45px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);max-width:900px;width:95%}
     h1{text-align:center;margin-bottom:30px;font-size:3em;text-shadow:3px 3px 6px rgba(0,0,0,.5);background:linear-gradient(45deg,#87ceeb,#4682b4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:40px}
@@ -48,7 +48,6 @@
     .footer{text-align:center;margin-top:30px;font-size:.9em;opacity:.7}
     .reset-btn{margin-top:10px;padding:8px 18px;background:rgba(255,80,80,.25);border:1px solid rgba(255,80,80,.6);color:#ffb8b8;border-radius:8px;cursor:pointer;transition:background .2s}
     .reset-btn:hover{background:rgba(255,80,80,.4)}
-    /*  prestige button  */
     .prestige-btn{margin-top:15px;padding:10px 20px;background:rgba(255,215,0,.2);border:2px solid #ffd700;color:#ffd700;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
     .prestige-btn:hover{background:rgba(255,215,0,.3);box-shadow:0 0 15px rgba(255,215,0,.5)}
     .prestige-wrap{display:none;text-align:center;margin-top:15px}
@@ -60,7 +59,7 @@
     /*  =====  DEV MENU  =====  */
     .dev-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:300px;color:#eee;display:none;flex-direction:column;gap:10px;z-index:1000}
     .dev-menu.show{display:flex}
-    .dev-header{display:flex;justify-content:space-between;align-items:center}
+    .dev-header{display:flex;justify-content:space-between;align-items:center;cursor:move}   /* drag handle */
     .dev-title{font-size:1.1em;font-weight:bold;color:#87ceeb}
     .dev-close{background:none;border:none;color:#eee;font-size:1.2em;cursor:pointer}
     .dev-close:hover{color:#ff5c5c}
@@ -82,7 +81,7 @@
 
   <!--  DEV MENU  -->
   <div class="dev-menu" id="devMenu">
-    <div class="dev-header">
+    <div class="dev-header" id="devHeader">
       <span class="dev-title">🛠️ Dev Menu</span>
       <button class="dev-close" onclick="toggleDev(false)">×</button>
     </div>
@@ -318,13 +317,10 @@
     //  =====  SECRET CODE SYSTEM  =====
     const SECRET_CODE='calvinissigma';
     let codeInput='';
-    let devUnlocked=localStorage.getItem('devUnlocked')==='true';
 
     function askSecretCode(){
       const ans=prompt('Enter secret code:');
       if(ans===SECRET_CODE){
-        devUnlocked=true;
-        localStorage.setItem('devUnlocked','true');
         toggleDev(true);
       }else{
         alert('Nope.');
@@ -371,11 +367,28 @@
       location.reload();
     }
 
+    //  =====  DRAG DEV MENU  =====
+    const devHdr=document.getElementById('devHeader');
+    const devMenu=document.getElementById('devMenu');
+    let dragging=false,offsetX=0,offsetY=0;
+
+    devHdr.addEventListener('mousedown',function(e){
+      dragging=true;
+      offsetX=e.clientX-devMenu.offsetLeft;
+      offsetY=e.clientY-devMenu.offsetTop;
+    });
+    document.addEventListener('mousemove',function(e){
+      if(!dragging)return;
+      devMenu.style.left=e.clientX-offsetX+'px';
+      devMenu.style.top=e.clientY-offsetY+'px';
+      devMenu.style.transform='none';
+    });
+    document.addEventListener('mouseup',()=>dragging=false);
+
     //  =====  INIT  =====
     loadGame();
     updateDisplay();
     renderUpgrades();
-    if(devUnlocked)toggleDev(true);   // keep open if already unlocked
   </script>
 </body>
 </html>
