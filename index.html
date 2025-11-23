@@ -228,7 +228,7 @@
       <div class="pack-item" onclick="buyPack('legendary')">
         <div>
           <div class="pack-name">Legendary Pack</div>
-          <div class="pack-odds">50% Epic | 35% Legendary | 0.01% ULTAMATE</div>
+          <div class="pack-odds">50% Epic | 35% Legendary | 0.00001% ULTAMATE</div>
         </div>
         <div class="pack-cost">10 000 💧</div>
       </div>
@@ -349,7 +349,7 @@
         {name:"Poseidon",emoji:"🧜‍♂️",value:1500},
         {name:"Leviathan",emoji:"🐉",value:2000}
       ],
-      godly:[
+      ULTAMATE:[
         {name:"The One And Only Jellybean",emoji:"👑",value:1000000000000}
       ]
     };
@@ -547,11 +547,11 @@
       location.reload();
     }
     function devGiveCard(){
-      const rarities=['common','rare','epic','legendary','godly'];
-      const r=prompt('Enter rarity (common/rare/epic/legendary/godly):')?.toLowerCase();
+      const rarities=['common','rare','epic','legendary','ULTAMATE'];
+      const r=prompt('Enter rarity (common/rare/epic/legendary/ULTAMATE):')?.toLowerCase();
       if(!rarities.includes(r))return alert('Invalid rarity');
       if(r==='godly'){
-        const code=prompt('Enter GODLY code:');
+        const code=prompt('Enter ULTAMATE code:');
         if(code!=='0717')return alert('Wrong code');
       }
       giveCard(r);
