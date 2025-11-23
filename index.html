@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Water Bottle Clicker</title>
   <style>
-    /*  =====  same glassy base  =====  */
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);min-height:100vh;display:flex;justify-content:center;align-items:center;color:white}
     .game-container{background:rgba(255,255,255,.05);backdrop-filter:blur(15px);border-radius:25px;padding:40px;box-shadow:0 25px 45px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.2);max-width:900px;width:95%}
@@ -66,6 +65,10 @@
     .dev-input{width:100%;padding:6px 8px;border-radius:4px;border:none;background:rgba(255,255,255,.1);color:#fff}
     .dev-btn{padding:6px;border-radius:4px;border:none;background:#4682b4;color:#fff;cursor:pointer;transition:background .2s}
     .dev-btn:hover{background:#5691c4}
+
+    /*  =====  MINIMISED BAR  =====  */
+    .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
+    .dev-min-bar:hover{background:rgba(255,255,255,.1)}
   </style>
 </head>
 
@@ -90,6 +93,10 @@
     <input type="number" class="dev-input" id="devWater" min="0" value="0">
     <button class="dev-btn" onclick="setWater()">Apply</button>
 
+    <label>Set Click Power</label>
+    <input type="number" class="dev-input" id="devClickPower" min="1" value="1">
+    <button class="dev-btn" onclick="setClickPower()">Apply</button>
+
     <label>Set Multiplier</label>
     <input type="number" class="dev-input" id="devMult" min="0.1" step="0.1" value="1">
     <button class="dev-btn" onclick="setMult()">Apply</button>
@@ -105,6 +112,9 @@
     <button class="dev-btn" onclick="instantPrestige()">Instant Prestige (+0.1×)</button>
     <button class="dev-btn" onclick="devReset()">Dev Hard Reset</button>
   </div>
+
+  <!--  MINIMISED BAR  -->
+  <div class="dev-min-bar" id="devMinBar" onclick="restoreDev()">🛠️ Dev Menu</div>
 
   <div class="game-container">
     <h1>💧 Water Bottle Clicker 💧</h1>
@@ -316,7 +326,6 @@
 
     //  =====  SECRET CODE SYSTEM  =====
     const SECRET_CODE='calvinissigma';
-    let codeInput='';
 
     function askSecretCode(){
       const ans=prompt('Enter secret code:');
@@ -327,17 +336,18 @@
       }
     }
 
-    function toggleDev(show){
-      const d=document.getElementById('devMenu');
-      if(show)d.classList.add('show');else d.classList.remove('show');
-    }
-
     //  =====  DEV MENU FUNCTIONS  =====
     function setWater(){
       const v=Number(document.getElementById('devWater').value);
       if(v<0)return;
       gameState.water=v;
       updateDisplay();renderUpgrades();saveGame();
+    }
+    function setClickPower(){
+      const v=Number(document.getElementById('devClickPower').value);
+      if(v<1)return;
+      gameState.waterPerClick=v;
+      updateDisplay();saveGame();
     }
     function setMult(){
       const v=Number(document.getElementById('devMult').value);
@@ -365,6 +375,22 @@
       if(!confirm('Dev hard-reset everything?'))return;
       localStorage.removeItem('waterClickerSave');
       location.reload();
+    }
+
+    //  =====  DEV MENU SHOW / HIDE / MINIMISE  =====
+    function toggleDev(show){
+      const d=document.getElementById('devMenu');
+      const b=document.getElementById('devMinBar');
+      if(show){
+        d.classList.add('show');
+        b.style.display='none';
+      }else{
+        d.classList.remove('show');
+        b.style.display='block';
+      }
+    }
+    function restoreDev(){
+      toggleDev(true);
     }
 
     //  =====  DRAG DEV MENU  =====
