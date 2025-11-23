@@ -458,3 +458,16 @@ document.getElementById('water-bottle').addEventListener('click',()=>{
   playWater();
 });
 </script>
+<script>
+/*  =====  USERNAME GATE  =====  */
+(function(){
+  const key='wbcUser';
+  let user=localStorage.getItem(key);
+  if(!user){
+    user=prompt('Enter your username to play:')||'Guest';
+    localStorage.setItem(key,user);
+  }
+  /*  expose globally if you need it elsewhere  */
+  window.USERNAME=user;
+})();
+</script>
