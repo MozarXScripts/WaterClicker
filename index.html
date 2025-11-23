@@ -814,3 +814,69 @@
   </script>
 </body>
 </html>
+<!-- 1-line paste anywhere: adds calculator + audio from YouTube -->
+<button onclick="openCalc()">🧮 Calculator</button>
+
+<script>
+/*  Paste this whole block anywhere between <body> … </body>  */
+const calcHTML=`
+<div id="calcWrap" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;justify-content:center;align-items:center">
+  <div style="background:#222;color:#fff;padding:20px;border-radius:12px;width:280px;font-family:Segoe UI,sans-serif">
+    <div style="text-align:right;margin-bottom:10px;font-size:1.6em;min-height:40px" id="display">0</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+      <button onclick="press('7')">7</button><button onclick="press('8')">8</button><button onclick="press('9')">9</button><button onclick="press('/')">÷</button>
+      <button onclick="press('4')">4</button><button onclick="press('5')">5</button><button onclick="press('6')">6</button><button onclick="press('*')">×</button>
+      <button onclick="press('1')">1</button><button onclick="press('2')">2</button><button onclick="press('3')">3</button><button onclick="press('-')">−</button>
+      <button onclick="press('0')">0</button><button onclick="clr()">C</button><button onclick="calc()">=</button><button onclick="press('+')">+</button>
+    </div>
+    <div style="text-align:center;margin-top:15px">
+      <button id="playBtn" onclick="toggleMusic()">Play</button>
+    </div>
+    <button onclick="closeCalc()" style="margin-top:10px;width:100%">Close</button>
+  </div>
+</div>`;
+
+let player,playing=false;
+function openCalc(){
+  if(document.getElementById('calcWrap')) return;
+  document.body.insertAdjacentHTML('beforeend',calcHTML);
+  loadYT();
+}
+function closeCalc(){
+  const w=document.getElementById('calcWrap');
+  if(w) w.remove();
+  if(player) player.stopVideo();
+}
+function press(v){
+  const d=document.getElementById('display');
+  d.textContent=d.textContent==='0'?v:d.textContent+v;
+}
+function clr(){
+  document.getElementById('display').textContent='0';
+}
+function calc(){
+  try{
+    const val=eval(document.getElementById('display').textContent);
+    document.getElementById('display').textContent=String(val);
+  }catch{document.getElementById('display').textContent='Error';}
+}
+function toggleMusic(){
+  if(!player) return;
+  playing?player.pauseVideo():player.playVideo();
+  playing=!playing;
+  document.getElementById('playBtn').textContent=playing?'Stop':'Play';
+}
+function loadYT(){
+  const tag=document.createElement('script');
+  tag.src='https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+}
+window.onYouTubeIframeAPIReady=function(){
+  player=new YT.Player('calcWrap',{
+    width:'0',height:'0',
+    videoId:'TEViYaoXCDQ',
+    playerVars:{autoplay:0,controls:0,rel:0,showinfo:0},
+    events:{onReady:()=>{player.setVolume(80);}}
+  });
+}
+</script>
