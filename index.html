@@ -70,25 +70,60 @@
     .dev-min-bar{position:fixed;bottom:15px;left:15px;padding:4px 8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#ccc;border-radius:4px;font-size:.75em;cursor:pointer;display:none;z-index:998}
     .dev-min-bar:hover{background:rgba(255,255,255,.1)}
 
-    /*  =====  GAMBLE MODAL  =====  */
-    .gamble-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;justify-content:center;align-items:center;z-index:2000}
-    .gamble-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:25px;width:320px;color:#eee;display:flex;flex-direction:column;gap:12px}
-    .gamble-title{font-size:1.4em;text-align:center;color:#87ceeb;margin-bottom:10px}
-    .gamble-option{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;cursor:pointer;transition:background .2s}
-    .gamble-option:hover{background:rgba(255,255,255,.2)}
-    .gamble-label{font-weight:600}
-    .gamble-chance{font-size:.85em;opacity:.8}
-    .gamble-mult{color:#ffd700;font-weight:bold}
-    .gamble-input{width:100%;padding:8px;border-radius:6px;border:none;background:rgba(255,255,255,.1);color:#fff;margin-top:8px}
-    .gamble-btns{display:flex;gap:10px;margin-top:10px}
-    .gamble-btn{flex:1;padding:8px;border:none;border-radius:6px;cursor:pointer;font-weight:bold;transition:background .2s}
-    .gamble-roll{background:#4682b4;color:#fff}
-    .gamble-roll:hover{background:#5691c4}
-    .gamble-close{background:#c44d4d;color:#fff}
-    .gamble-close:hover{background:#d35e5e}
-    .gamble-result{text-align:center;margin-top:8px;font-size:1.1em}
-    .gamble-win{color:#00ff88}
-    .gamble-lose{color:#ff5c5c}
+    /*  =====  SHOP / CARD PACKS  =====  */
+    .shop-btn{margin-top:10px;padding:10px 20px;background:rgba(0,180,255,.2);border:2px solid #00b4ff;color:#00b4ff;border-radius:10px;cursor:pointer;font-weight:bold;transition:all .2s}
+    .shop-btn:hover{background:rgba(0,180,255,.3);box-shadow:0 0 15px rgba(0,180,255,.5)}
+    .shop-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3000}
+    .shop-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:25px;width:340px;color:#eee;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto}
+    .shop-title{font-size:1.5em;text-align:center;color:#87ceeb;margin-bottom:10px}
+    .pack-item{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.1);border-radius:8px;padding:12px;cursor:pointer;transition:background .2s}
+    .pack-item:hover{background:rgba(255,255,255,.2)}
+    .pack-name{font-weight:600}
+    .pack-cost{color:#ffd700}
+    .pack-odds{font-size:.75em;opacity:.8}
+    .shop-close{align-self:flex-end;padding:4px 10px;background:#c44d4d;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .shop-close:hover{background:#d35e5e}
+    .view-collection-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#2ecc71;color:#fff;cursor:pointer;font-weight:bold}
+    .view-collection-btn:hover{background:#27ae60}
+
+    /*  =====  OPENING PACK  =====  */
+    .open-pack-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;justify-content:center;align-items:center;z-index:3100}
+    .open-pack-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:420px;color:#eee;display:flex;flex-direction:column;gap:15px}
+    .open-pack-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
+    .cards-reveal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:10px}
+    .card-item{text-align:center;background:rgba(255,255,255,.1);border-radius:8px;padding:10px;border:2px solid transparent;transition:border .2s}
+    .card-item.godly{border-color:#ffd700;box-shadow:0 0 12px #ffd700}
+    .card-item.legendary{border-color:#ff33a8;box-shadow:0 0 10px #ff33a8}
+    .card-item.epic{border-color:#9b59b6;box-shadow:0 0 8px #9b59b6}
+    .card-item.rare{border-color:#3498db;box-shadow:0 0 6px #3498db}
+    .card-item.common{border-color:#95a5a6;box-shadow:0 0 4px #95a5a6}
+    .card-emoji{font-size:2.2em;margin-bottom:4px}
+    .card-name{font-weight:600;font-size:.9em}
+    .card-rarity{font-size:.75em;opacity:.8;margin:2px 0}
+    .card-value{font-size:.8em;color:#ffd700}
+    .card-actions{display:flex;gap:6px;margin-top:6px}
+    .card-actions button{flex:1;padding:4px 6px;border:none;border-radius:4px;cursor:pointer;font-size:.75em;font-weight:bold}
+    .sell-btn{background:#e74c3c;color:#fff}
+    .keep-btn{background:#27ae60;color:#fff}
+    .finish-open-btn{margin-top:10px;padding:8px;border:none;border-radius:6px;background:#4682b4;color:#fff;cursor:pointer;font-weight:bold}
+    .finish-open-btn:hover{background:#5691c4}
+
+    /*  =====  COLLECTION VIEW  =====  */
+    .collection-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);display:flex;justify-content:center;align-items:center;z-index:3200}
+    .collection-box{background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:20px;width:400px;color:#eee;display:flex;flex-direction:column;gap:12px;max-height:90vh;overflow-y:auto}
+    .collection-title{text-align:center;font-size:1.4em;color:#87ceeb;margin-bottom:10px}
+    .collection-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .collection-card{text-align:center;background:rgba(255,255,255,.1);border-radius:6px;padding:8px;border:2px solid transparent;transition:border .2s}
+    .collection-card.godly{border-color:#ffd700;box-shadow:0 0 10px #ffd700}
+    .collection-card.legendary{border-color:#ff33a8;box-shadow:0 0 8px #ff33a8}
+    .collection-card.epic{border-color:#9b59b6;box-shadow:0 0 6px #9b59b6}
+    .collection-card.rare{border-color:#3498db;box-shadow:0 0 4px #3498db}
+    .collection-card.common{border-color:#95a5a6;box-shadow:0 0 3px #95a5a6}
+    .collection-emoji{font-size:1.8em}
+    .collection-name{font-size:.75em;font-weight:600;margin-top:4px}
+    .collection-sell-btn{margin-top:4px;padding:4px 6px;border:none;border-radius:4px;background:#e74c3c;color:#fff;cursor:pointer;font-size:.7em;font-weight:bold}
+    .collection-close{align-self:flex-end;padding:4px 10px;background:#c44d4d;color:#fff;border:none;border-radius:6px;cursor:pointer}
+    .collection-close:hover{background:#d35e5e}
   </style>
 </head>
 
@@ -131,6 +166,7 @@
 
     <button class="dev-btn" onclick="instantPrestige()">Instant Prestige (+0.1×)</button>
     <button class="dev-btn" onclick="devReset()">Dev Hard Reset</button>
+    <button class="dev-btn" onclick="devGiveCard()">Give Any Card</button>
   </div>
 
   <!--  MINIMISED BAR  -->
@@ -170,6 +206,54 @@
     </div>
   </div>
 
+  <!--  SHOP MODAL  -->
+  <div class="shop-modal" id="shopModal" style="display:none">
+    <div class="shop-box">
+      <div class="shop-title">🎴 Card Shop</div>
+      <button class="shop-close" onclick="closeShop()">Close</button>
+      <div class="pack-item" onclick="buyPack('common')">
+        <div>
+          <div class="pack-name">Common Pack</div>
+          <div class="pack-odds">75% Common | 20% Rare | 5% Epic</div>
+        </div>
+        <div class="pack-cost">250 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyPack('rare')">
+        <div>
+          <div class="pack-name">Rare Pack</div>
+          <div class="pack-odds">60% Rare | 30% Epic | 10% Legendary</div>
+        </div>
+        <div class="pack-cost">10 000 💧</div>
+      </div>
+      <div class="pack-item" onclick="buyPack('legendary')">
+        <div>
+          <div class="pack-name">Legendary Pack</div>
+          <div class="pack-odds">50% Epic | 35% Legendary | 1% GODLY</div>
+        </div>
+        <div class="pack-cost">100 000 💧</div>
+      </div>
+      <button class="view-collection-btn" onclick="openCollection()">📂 View Collection</button>
+    </div>
+  </div>
+
+  <!--  OPENING PACK  -->
+  <div class="open-pack-modal" id="openPackModal" style="display:none">
+    <div class="open-pack-box">
+      <div class="open-pack-title">Opening Pack...</div>
+      <div class="cards-reveal" id="cardsReveal"></div>
+      <button class="finish-open-btn" onclick="finishOpenPack()">Done</button>
+    </div>
+  </div>
+
+  <!--  COLLECTION VIEW  -->
+  <div class="collection-modal" id="collectionModal" style="display:none">
+    <div class="collection-box">
+      <div class="collection-title">Your Collection</div>
+      <button class="collection-close" onclick="closeCollection()">Close</button>
+      <div class="collection-grid" id="collectionGrid"></div>
+    </div>
+  </div>
+
   <div class="game-container">
     <h1>💧 Water Bottle Clicker 💧</h1>
     <div class="stats">
@@ -192,8 +276,8 @@
         <div class="prestige-wrap" id="prestige-wrap">
           <button class="prestige-btn" onclick="prestige()">Prestige (reset for +0.1× multiplier)</button>
         </div>
-        <!--  NEW GAMBLE BUTTON  -->
         <button class="prestige-btn" style="margin-top:10px" onclick="openGamble()">💰 Water Gamble</button>
+        <button class="shop-btn" onclick="openShop()">🎴 Card Shop</button>
       </div>
 
       <div class="upgrades-section">
@@ -216,6 +300,7 @@
         const l=JSON.parse(s);
         gameState={...gameState,...l};
         gameState.upgrades={...gameState.upgrades,...l.upgrades};
+        if(l.collection) gameState.collection=l.collection;
       }
     }
     function saveGame(){
@@ -230,6 +315,7 @@
       autoRate:0,
       multiplier:1,
       totalWaterAllTime:0,
+      collection:[],
       upgrades:{
         betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:50,effect:()=>{gameState.waterPerClick+=1}},
         autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},
@@ -239,6 +325,33 @@
         waterFall:         {name:"Water Fall",description:"+100/sec auto",cost:25000,owned:0,maxLevel:5,effect:()=>{gameState.autoRate+=100}},
         oceanGenerator:    {name:"Ocean Generator",description:"+1000/sec auto",cost:100000,owned:0,maxLevel:3,effect:()=>{gameState.autoRate+=1000}}
       }
+    };
+
+    //  =====  CARD DATA  =====
+    const cardData={
+      common:[
+        {name:"Dropplet",emoji:"💧",value:10},
+        {name:"Ice Cube",emoji:"🧊",value:15},
+        {name:"Water Gun",emoji:"🔫",value:20}
+      ],
+      rare:[
+        {name:"Wave",emoji:"🌊",value:50},
+        {name:"Fountain",emoji:"⛲",value:60},
+        {name:"Waterfall",emoji:"🏞️",value:70}
+      ],
+      epic:[
+        {name:"Storm",emoji:"⛈️",value:150},
+        {name:"Whirlpool",emoji:"🌀",value:200},
+        {name:"Tsunami",emoji:"🌊",value:250}
+      ],
+      legendary:[
+        {name:"Atlantis",emoji:"🏰",value:1000},
+        {name:"Poseidon",emoji:"🧜‍♂️",value:1500},
+        {name:"Leviathan",emoji:"🐉",value:2000}
+      ],
+      godly:[
+        {name:"Captain Calvin the Brave",emoji:"🫅",value:Infinity}
+      ]
     };
 
     //  =====  UTILS  =====
@@ -346,6 +459,7 @@
         autoRate:0,
         multiplier:newMult,
         totalWaterAllTime:0,
+        collection:[],
         upgrades:{
           betterBottle:      {name:"Better Bottle",description:"+1 per click",cost:50,owned:0,maxLevel:50,effect:()=>{gameState.waterPerClick+=1}},
           autoDropper:       {name:"Auto Dropper",description:"+1/sec auto",cost:200,owned:0,maxLevel:25,effect:()=>{gameState.autoRate+=1}},
@@ -363,7 +477,7 @@
 
     //  =====  RESET  =====
     function resetGame(){
-      if(!confirm('Erase ALL progress (including multiplier) and start over?'))return;
+      if(!confirm('Erase ALL progress (including multiplier & cards) and start over?'))return;
       localStorage.removeItem('waterClickerSave');
       location.reload();
     }
@@ -432,6 +546,18 @@
       localStorage.removeItem('waterClickerSave');
       location.reload();
     }
+    function devGiveCard(){
+      const rarities=['common','rare','epic','legendary','godly'];
+      const r=prompt('Enter rarity (common/rare/epic/legendary/godly):')?.toLowerCase();
+      if(!rarities.includes(r))return alert('Invalid rarity');
+      if(r==='godly'){
+        const code=prompt('Enter GODLY code:');
+        if(code!=='0717')return alert('Wrong code');
+      }
+      giveCard(r);
+      alert('Card given!');
+      saveGame();
+    }
 
     //  =====  DEV MENU SHOW / HIDE / MINIMISE  =====
     function toggleDev(show){
@@ -479,7 +605,6 @@
     }
     function selectGamble(m){
       chosenMult=m;
-      // visual feedback
       document.querySelectorAll('.gamble-option').forEach(opt=>opt.style.border='1px solid transparent');
       document.querySelectorAll('.gamble-option')[m===2?0:m===5?1:2].style.border='1px solid #87ceeb';
     }
@@ -506,6 +631,143 @@
       updateDisplay();
       renderUpgrades();
       saveGame();
+    }
+
+    //  =====  SHOP / CARD FUNCTIONS  =====
+    function openShop(){
+      document.getElementById('shopModal').style.display='flex';
+    }
+    function closeShop(){
+      document.getElementById('shopModal').style.display='none';
+    }
+    function buyPack(type){
+      const prices={common:250,rare:1000,legendary:5000};
+      const price=prices[type];
+      if(gameState.water<price)return alert('Not enough water!');
+      gameState.water-=price;
+      updateDisplay();
+      saveGame();
+      const cards=generatePack(type);
+      showPackOpening(cards);
+    }
+    function generatePack(type){
+      const cards=[];
+      const rng=Math.random;
+      for(let i=0;i<3;i++){
+        let r;
+        if(type==='common'){
+          r=rng()<0.75?'common':rng()<0.95?'rare':'epic';
+        }else if(type==='rare'){
+          r=rng()<0.6?'rare':rng()<0.9?'epic':'legendary';
+        }else{
+          r=rng()<0.5?'epic':rng()<0.85?'legendary':'godly';
+        }
+        const pool=cardData[r];
+        const card=pool[Math.floor(Math.random()*pool.length)];
+        cards.push({...card,rarity:r});
+      }
+      return cards;
+    }
+    function showPackOpening(cards){
+      const reveal=document.getElementById('cardsReveal');
+      reveal.innerHTML='';
+      window.tempPackCards=cards;
+      cards.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`card-item ${card.rarity}`;
+        div.innerHTML=`
+          <div class="card-emoji">${card.emoji}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-rarity">${card.rarity.toUpperCase()}</div>
+          <div class="card-value">${card.value===Infinity?'∞':formatNumber(card.value)} 💧</div>
+          <div class="card-actions">
+            <button class="sell-btn" onclick="sellCardFromPack(${idx})">Sell</button>
+            <button class="keep-btn" onclick="keepCardFromPack(${idx})">Keep</button>
+          </div>
+        `;
+        reveal.appendChild(div);
+      });
+      document.getElementById('openPackModal').style.display='flex';
+    }
+    function sellCardFromPack(idx){
+      const card=window.tempPackCards[idx];
+      const val=card.value===Infinity?10000:card.value;
+      gameState.water+=val;
+      gameState.totalWaterAllTime+=val;
+      updateDisplay();
+      window.tempPackCards.splice(idx,1);
+      rerenderPack();
+    }
+    function keepCardFromPack(idx){
+      const card=window.tempPackCards[idx];
+      gameState.collection.push(card);
+      window.tempPackCards.splice(idx,1);
+      rerenderPack();
+    }
+    function rerenderPack(){
+      const cards=window.tempPackCards;
+      const reveal=document.getElementById('cardsReveal');
+      reveal.innerHTML='';
+      cards.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`card-item ${card.rarity}`;
+        div.innerHTML=`
+          <div class="card-emoji">${card.emoji}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-rarity">${card.rarity.toUpperCase()}</div>
+          <div class="card-value">${card.value===Infinity?'∞':formatNumber(card.value)} 💧</div>
+          <div class="card-actions">
+            <button class="sell-btn" onclick="sellCardFromPack(${idx})">Sell</button>
+            <button class="keep-btn" onclick="keepCardFromPack(${idx})">Keep</button>
+          </div>
+        `;
+        reveal.appendChild(div);
+      });
+      if(cards.length===0) finishOpenPack();
+    }
+    function finishOpenPack(){
+      document.getElementById('openPackModal').style.display='none';
+      saveGame();
+    }
+    function openCollection(){
+      renderCollection();
+      document.getElementById('collectionModal').style.display='flex';
+    }
+    function closeCollection(){
+      document.getElementById('collectionModal').style.display='none';
+    }
+    function renderCollection(){
+      const grid=document.getElementById('collectionGrid');
+      grid.innerHTML='';
+      if(gameState.collection.length===0){
+        grid.innerHTML='<div style="grid-column:1/-1;text-align:center;opacity:.7">No cards yet. Buy some packs!</div>';
+        return;
+      }
+      gameState.collection.forEach((card,idx)=>{
+        const div=document.createElement('div');
+        div.className=`collection-card ${card.rarity}`;
+        div.innerHTML=`
+          <div class="collection-emoji">${card.emoji}</div>
+          <div class="collection-name">${card.name}</div>
+          <button class="collection-sell-btn" onclick="sellCardFromCollection(${idx})">Sell ${card.value===Infinity?'∞':formatNumber(card.value)}</button>
+        `;
+        grid.appendChild(div);
+      });
+    }
+    function sellCardFromCollection(idx){
+      const card=gameState.collection[idx];
+      const val=card.value===Infinity?10000:card.value;
+      gameState.water+=val;
+      gameState.totalWaterAllTime+=val;
+      gameState.collection.splice(idx,1);
+      updateDisplay();
+      renderCollection();
+      saveGame();
+    }
+    function giveCard(rarity){
+      const pool=cardData[rarity];
+      const card=pool[Math.floor(Math.random()*pool.length)];
+      gameState.collection.push({...card,rarity});
     }
 
     //  =====  INIT  =====
