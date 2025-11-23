@@ -814,3 +814,81 @@
   </script>
 </body>
 </html>
+<!--  Modern calculator + YouTube-audio  -->
+<div style="position:fixed;top:20px;right:20px;z-index:999">
+  <button id="calcToggle" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px 16px;border-radius:24px;cursor:pointer;backdrop-filter:blur(10px);font-size:1.1em;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:.3s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openCalc()">🧮 Calculator</button>
+</div>
+
+<script>
+const calcHTML=`
+<div id="calcWrap" style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;justify-content:center;align-items:center;animation:fadeIn .3s ease">
+  <div style="background:rgba(30,30,40,.85);border:1px solid rgba(255,255,255,.15);color:#fff;padding:25px;border-radius:20px;width:320px;backdrop-filter:blur(15px);box-shadow:0 20px 40px rgba(0,0,0,.4)">
+    <div id="display" style="text-align:right;margin-bottom:15px;font-size:2.2em;min-height:45px">0</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <button class="calcBtn" onclick="press('7')">7</button><button class="calcBtn" onclick="press('8')">8</button><button class="calcBtn" onclick="press('9')">9</button><button class="calcBtn op" onclick="press('/')">÷</button>
+      <button class="calcBtn" onclick="press('4')">4</button><button class="calcBtn" onclick="press('5')">5</button><button class="calcBtn" onclick="press('6')">6</button><button class="calcBtn op" onclick="press('*')">×</button>
+      <button class="calcBtn" onclick="press('1')">1</button><button class="calcBtn" onclick="press('2')">2</button><button class="calcBtn" onclick="press('3')">3</button><button class="calcBtn op" onclick="press('-')">−</button>
+      <button class="calcBtn" onclick="press('0')">0</button><button class="calcBtn" onclick="clr()">C</button><button class="calcBtn eq" onclick="calc()">=</button><button class="calcBtn op" onclick="press('+')">+</button>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;margin-top:15px;gap:10px">
+      <button id="playBtn" onclick="toggleMusic()" style="background:#1e1e2f;border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:50%;width:52px;height:52px;font-size:1.4em;cursor:pointer">▶</button>
+      <div id="eqBars" style="display:flex;gap:3px"><span style="width:4px;height:20px;background:#fff;animation:eq .6s infinite"></span><span style="width:4px;height:20px;background:#fff;animation:eq .6s infinite .1s"></span><span style="width:4px;height:20px;background:#fff;animation:eq .6s infinite .2s"></span></div>
+      <button onclick="closeCalc()" style="background:transparent;border:none;color:#fff;font-size:1.2em;cursor:pointer">✖</button>
+    </div>
+  </div>
+</div>
+<style>
+.calcBtn{width:100%;padding:14px 0;font-size:1.3em;border:none;border-radius:12px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;transition:.2s}
+.calcBtn:hover{background:rgba(255,255,255,.15)}
+.op{background:rgba(255,180,0,.15);color:#ffd700}
+.eq{background:rgba(0,200,255,.15);color:#00b4ff}
+#eqBars span{transition:.3s;transform-origin:bottom}
+@keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+</style>`;
+
+let player,playing=false;
+function openCalc(){
+  if(document.getElementById('calcWrap')) return;
+  document.body.insertAdjacentHTML('beforeend',calcHTML);
+  loadYT();
+  // auto-start music once player ready
+  window.onYouTubeIframeAPIReady=()=>{
+    player=new YT.Player('calcWrap',{
+      width:'0',height:'0',
+      videoId:'TEViYaoXCDQ',
+      playerVars:{autoplay:1,controls:0,rel:0,showinfo:0},
+      events:{onReady:()=>{player.setVolume(80);playing=true;document.getElementById('playBtn').innerHTML='❚❚';}}
+    });
+  };
+}
+function closeCalc(){
+  const w=document.getElementById('calcWrap');
+  if(w) w.remove();
+  if(player){ player.destroy(); player=null; playing=false; }
+}
+function press(v){
+  const d=document.getElementById('display');
+  d.textContent=d.textContent==='0'?v:d.textContent+v;
+}
+function clr(){
+  document.getElementById('display').textContent='0';
+}
+function calc(){
+  try{
+    const val=eval(document.getElementById('display').textContent);
+    document.getElementById('display').textContent=String(val);
+  }catch{document.getElementById('display').textContent='Error';}
+}
+function toggleMusic(){
+  if(!player) return;
+  if(playing){ player.pauseVideo(); document.getElementById('playBtn').innerHTML='▶'; }
+  else{ player.playVideo(); document.getElementById('playBtn').innerHTML='❚❚'; }
+  playing=!playing;
+}
+function loadYT(){
+  const tag=document.createElement('script');
+  tag.src='https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+}
+</script>
