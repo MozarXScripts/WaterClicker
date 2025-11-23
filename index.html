@@ -814,7 +814,7 @@
   </script>
 </body>
 </html>
-<!--  Calculator + YouTube-audio (stays open until X clicked)  -->
+<!--  Calculator + persistent YouTube-audio (survives close/re-open)  -->
 <div style="position:fixed;top:20px;right:20px;z-index:999">
   <button id="calcToggle" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px 16px;border-radius:24px;cursor:pointer;backdrop-filter:blur(10px);font-size:1.1em;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:.3s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openCalc()">🧮 Calculator</button>
 </div>
@@ -847,24 +847,28 @@ const calcHTML=`
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 </style>`;
 
-let player,playing=false;
+/*  ----------  persistent player logic  ----------  */
+let player,playing=false,firstOpen=true;
+
 function openCalc(){
-  if(document.getElementById('calcWrap')) return;
+  if(document.getElementById('calcWrap')){          // already showing → just bring to front
+    document.getElementById('calcWrap').style.display='flex';
+    return;
+  }
   document.body.insertAdjacentHTML('beforeend',calcHTML);
-  loadYT();
-  window.onYouTubeIframeAPIReady=()=>{
-    player=new YT.Player('playerDiv',{
-      width:'0',height:'0',
-      videoId:'TEViYaoXCDQ',
-      playerVars:{autoplay:1,controls:0,rel:0,showinfo:0},
-      events:{onReady:()=>{player.setVolume(80);playing=true;document.getElementById('playBtn').innerHTML='❚❚';}}
-    });
-  };
+  if(firstOpen){                                    // create player once
+    loadYT();
+    firstOpen=false;
+  }else{                                            // re-use existing player
+    window.onYouTubeIframeAPIReady=()=>{
+      if(player&&!playing){player.playVideo();playing=true;document.getElementById('playBtn').innerHTML='❚❚';}
+    };
+  }
 }
 function closeCalc(){
   const w=document.getElementById('calcWrap');
-  if(w) w.remove();
-  if(player){ player.destroy(); player=null; playing=false; }
+  if(w) w.style.display='none';                     // hide, NOT remove
+  if(player){player.pauseVideo();playing=false;document.getElementById('playBtn').innerHTML='▶';}
 }
 function press(v){
   const d=document.getElementById('display');
@@ -880,9 +884,9 @@ function calc(){
   }catch{document.getElementById('display').textContent='Error';}
 }
 function toggleMusic(){
-  if(!player) return;
-  if(playing){ player.pauseVideo(); document.getElementById('playBtn').innerHTML='▶'; }
-  else{ player.playVideo(); document.getElementById('playBtn').innerHTML='❚❚'; }
+  if(!player)return;
+  if(playing){player.pauseVideo();document.getElementById('playBtn').innerHTML='▶';}
+  else{player.playVideo();document.getElementById('playBtn').innerHTML='❚❚';}
   playing=!playing;
 }
 function loadYT(){
@@ -890,6 +894,17 @@ function loadYT(){
   tag.src='https://www.youtube.com/iframe_api';
   document.head.appendChild(tag);
 }
-// invisible player container (outside calculator)
+// invisible persistent player
 document.write('<div id="playerDiv" style="position:fixed;left:-9999px"></div>');
+
+window.onYouTubeIframeAPIReady=function(){
+  player=new YT.Player('playerDiv',{
+    width:'0',height:'0',
+    videoId:'TEViYaoXCDQ',
+    playerVars:{autoplay:1,controls:0,rel:0,showinfo:0},
+    events:{
+      onReady:()=>{player.setVolume(80);playing=true;document.getElementById('playBtn').innerHTML='❚❚';}
+    }
+  });
+};
 </script>
