@@ -814,7 +814,7 @@
   </script>
 </body>
 </html>
-<!--  Modern calculator + YouTube-audio (stays open until X clicked)  -->
+<!--  Calculator + YouTube-audio (stays open until X clicked)  -->
 <div style="position:fixed;top:20px;right:20px;z-index:999">
   <button id="calcToggle" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:10px 16px;border-radius:24px;cursor:pointer;backdrop-filter:blur(10px);font-size:1.1em;box-shadow:0 8px 20px rgba(0,0,0,.3);transition:.3s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openCalc()">🧮 Calculator</button>
 </div>
@@ -853,7 +853,7 @@ function openCalc(){
   document.body.insertAdjacentHTML('beforeend',calcHTML);
   loadYT();
   window.onYouTubeIframeAPIReady=()=>{
-    player=new YT.Player('calcWrap',{
+    player=new YT.Player('playerDiv',{
       width:'0',height:'0',
       videoId:'TEViYaoXCDQ',
       playerVars:{autoplay:1,controls:0,rel:0,showinfo:0},
@@ -890,4 +890,6 @@ function loadYT(){
   tag.src='https://www.youtube.com/iframe_api';
   document.head.appendChild(tag);
 }
+// invisible player container (outside calculator)
+document.write('<div id="playerDiv" style="position:fixed;left:-9999px"></div>');
 </script>
