@@ -172,41 +172,6 @@
   <!--  MINIMISED BAR  -->
   <div class="dev-min-bar" id="devMinBar" onclick="restoreDev()">🛠️ Dev Menu</div>
 
-  <!--  GAMBLE MODAL  -->
-<div class="gamble-modal" id="gambleModal">
-  <div class="gamble-box">
-    <button class="gamble-close" onclick="closeGamble()" title="Close">✕</button>
-
-    <div class="gamble-title">💰 Water Gamble</div>
-
-    <div class="gamble-options">
-      <div class="gamble-card" data-mult="2" onclick="selectGamble(2)">
-        <div class="gamble-label">Safe Bet</div>
-        <div class="gamble-chance">80 % chance</div>
-        <div class="gamble-mult">2×</div>
-      </div>
-      <div class="gamble-card" data-mult="5" onclick="selectGamble(5)">
-        <div class="gamble-label">Risky Bet</div>
-        <div class="gamble-chance">40 % chance</div>
-        <div class="gamble-mult">5×</div>
-      </div>
-      <div class="gamble-card" data-mult="10" onclick="selectGamble(10)">
-        <div class="gamble-label">High Roller</div>
-        <div class="gamble-chance">20 % chance</div>
-        <div class="gamble-mult">10×</div>
-      </div>
-    </div>
-
-    <input type="number" class="gamble-input" id="gambleAmount" min="1" placeholder="Amount to wager">
-
-    <div class="gamble-btns">
-      <button class="gamble-btn gamble-roll" onclick="rollGamble()">Roll</button>
-    </div>
-
-    <div class="gamble-result" id="gambleResult"></div>
-  </div>
-</div>
-
   <!--  SHOP MODAL  -->
   <div class="shop-modal" id="shopModal" style="display:none">
     <div class="shop-box">
@@ -593,47 +558,7 @@
       devMenu.style.transform='none';
     });
     document.addEventListener('mouseup',()=>dragging=false);
-
-    //  =====  GAMBLE FUNCTIONS  =====
-    let chosenMult=2;
-    function openGamble(){
-      document.getElementById('gambleModal').style.display='flex';
-      document.getElementById('gambleResult').textContent='';
-      document.getElementById('gambleAmount').value='';
-    }
-    function closeGamble(){
-      document.getElementById('gambleModal').style.display='none';
-    }
-    function selectGamble(m){
-      chosenMult=m;
-      document.querySelectorAll('.gamble-option').forEach(opt=>opt.style.border='1px solid transparent');
-      document.querySelectorAll('.gamble-option')[m===2?0:m===5?1:2].style.border='1px solid #87ceeb';
-    }
-    function rollGamble(){
-      const amt=Number(document.getElementById('gambleAmount').value);
-      if(!amt||amt<=0||amt>gameState.water){
-        alert('Invalid or insufficient water!');
-        return;
-      }
-      const chances={2:0.8,5:0.4,10:0.2};
-      const win=Math.random()<chances[chosenMult];
-      const result=document.getElementById('gambleResult');
-      if(win){
-        const gain=amt*(chosenMult-1);
-        gameState.water+=gain;
-        gameState.totalWaterAllTime+=gain;
-        result.textContent=`You won! +${formatNumber(gain)} water`;
-        result.className='gamble-result gamble-win';
-      }else{
-        gameState.water-=amt;
-        result.textContent=`You lost ${formatNumber(amt)} water`;
-        result.className='gamble-result gamble-lose';
-      }
-      updateDisplay();
-      renderUpgrades();
-      saveGame();
-    }
-
+    
     //  =====  SHOP / CARD FUNCTIONS  =====
     function openShop(){
       document.getElementById('shopModal').style.display='flex';
