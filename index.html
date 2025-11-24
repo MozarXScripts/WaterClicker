@@ -173,38 +173,39 @@
   <div class="dev-min-bar" id="devMinBar" onclick="restoreDev()">🛠️ Dev Menu</div>
 
   <!--  GAMBLE MODAL  -->
-  <div class="gamble-modal" id="gambleModal" style="display:none">
-    <div class="gamble-box">
-      <div class="gamble-title">💰 Water Gamble</div>
-      <div class="gamble-option" onclick="selectGamble(2)">
-        <div>
-          <div class="gamble-label">Safe Bet</div>
-          <div class="gamble-chance">80 % chance</div>
-        </div>
+<div class="gamble-modal" id="gambleModal">
+  <div class="gamble-box">
+    <button class="gamble-close" onclick="closeGamble()" title="Close">✕</button>
+
+    <div class="gamble-title">💰 Water Gamble</div>
+
+    <div class="gamble-options">
+      <div class="gamble-card" data-mult="2" onclick="selectGamble(2)">
+        <div class="gamble-label">Safe Bet</div>
+        <div class="gamble-chance">80 % chance</div>
         <div class="gamble-mult">2×</div>
       </div>
-      <div class="gamble-option" onclick="selectGamble(5)">
-        <div>
-          <div class="gamble-label">Risky Bet</div>
-          <div class="gamble-chance">40 % chance</div>
-        </div>
+      <div class="gamble-card" data-mult="5" onclick="selectGamble(5)">
+        <div class="gamble-label">Risky Bet</div>
+        <div class="gamble-chance">40 % chance</div>
         <div class="gamble-mult">5×</div>
       </div>
-      <div class="gamble-option" onclick="selectGamble(10)">
-        <div>
-          <div class="gamble-label">High Roller</div>
-          <div class="gamble-chance">20 % chance</div>
-        </div>
+      <div class="gamble-card" data-mult="10" onclick="selectGamble(10)">
+        <div class="gamble-label">High Roller</div>
+        <div class="gamble-chance">20 % chance</div>
         <div class="gamble-mult">10×</div>
       </div>
-      <input type="number" class="gamble-input" id="gambleAmount" min="1" placeholder="Amount to wager">
-      <div class="gamble-btns">
-        <button class="gamble-btn gamble-roll" onclick="rollGamble()">Roll</button>
-        <button class="gamble-btn gamble-close" onclick="closeGamble()">Close</button>
-      </div>
-      <div class="gamble-result" id="gambleResult"></div>
     </div>
+
+    <input type="number" class="gamble-input" id="gambleAmount" min="1" placeholder="Amount to wager">
+
+    <div class="gamble-btns">
+      <button class="gamble-btn gamble-roll" onclick="rollGamble()">Roll</button>
+    </div>
+
+    <div class="gamble-result" id="gambleResult"></div>
   </div>
+</div>
 
   <!--  SHOP MODAL  -->
   <div class="shop-modal" id="shopModal" style="display:none">
